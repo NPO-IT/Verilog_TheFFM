@@ -138,8 +138,14 @@ ROMr3(
 	.outclock(clk80),
 	.q(LCB_rq_data3)
 );
-
-
+//-----------------------21.09.2016 update----------------------
+ROMr1( 
+	.address(LCB_rq_addr1),
+	.inclock(clk80),
+	.outclock(clk80),
+	.q(LCB_rq_data1)
+);
+//-----------------------21.09.2016 update-----------------------
 wire [7:0]LCB_rx_wire3;
 wire LCB_rx_val3;
 wire [8:0]LCB_ROM_addr;
