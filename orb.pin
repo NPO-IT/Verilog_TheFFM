@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Wed Sep 21 16:54:52 2016
+File Generation Date & Time: Thu Sep 22 15:46:07 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -113,7 +113,7 @@ GND*                         : 68        :        :                   :         
 GND_INT                      : 69        : gnd    :                   :         :           :                
 GND*                         : 70        :        :                   :         :           :                
 GND*                         : 71        :        :                   :         :           :                
-Orb_wordValid                : 72        : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 72        :        :                   :         :           :                
 GND*                         : 73        :        :                   :         :           :                
 GND*                         : 74        :        :                   :         :           :                
 GND*                         : 75        :        :                   :         :           :                
@@ -124,7 +124,7 @@ GND*                         : 79        :        :                   :         
 GND*                         : 80        :        :                   :         :           :                
 GND*                         : 81        :        :                   :         :           :                
 GND*                         : 82        :        :                   :         :           :                
-GND*                         : 83        :        :                   :         :           :                
+Orb_wordValid                : 83        : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 84        :        :                   :         :           :                
 GND_INT                      : 85        : gnd    :                   :         :           :                
 GND*                         : 86        :        :                   :         :           :                
