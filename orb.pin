@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Thu Sep 29 16:02:43 2016
+File Generation Date & Time: Fri Sep 30 15:07:00 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -95,7 +95,7 @@ UART1_dRX                    : 50        : output : LVTTL/LVCMOS      :         
 Orb_serial                   : 51        : output : LVTTL/LVCMOS      :         :           : Y              
 GND_INT                      : 52        : gnd    :                   :         :           :                
 UART1_RX                     : 53        : input  : LVTTL/LVCMOS      :         :           : Y              
-GND*                         : 54        :        :                   :         :           :                
+Orb_wordValid                : 54        : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 55        :        :                   :         :           :                
 GND*                         : 56        :        :                   :         :           :                
 VCC_IO                       : 57        : power  :                   : 3.3V    :           :                
@@ -204,7 +204,7 @@ VCC_INT                      : 159       : power  :                   : 2.5V    
 VCC_IO                       : 160       : power  :                   : 3.3V    :           :                
 GND*                         : 161       :        :                   :         :           :                
 GND*                         : 162       :        :                   :         :           :                
-Orb_wordValid                : 163       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 163       :        :                   :         :           :                
 GND*                         : 164       :        :                   :         :           :                
 GND_INT                      : 165       : gnd    :                   :         :           :                
 GND*                         : 166       :        :                   :         :           :                

@@ -1,9 +1,9 @@
-Analysis & Synthesis Status : Successful - Thu Sep 29 16:02:36 2016
+Analysis & Synthesis Status : Successful - Fri Sep 30 15:06:52 2016
 Quartus II Version : 9.0 Build 184 04/29/2009 SP 1 SJ Web Edition
 Revision Name : orb
 Top-level Entity Name : TheFFM
 Family : FLEX10KE
-Total logic elements : 742
+Total logic elements : 746
 Total pins : 26
 Total memory bits : 40,448
 Total PLLs : 0

@@ -1,6 +1,3 @@
-/TheFFM.v.bak
-/lcbCombiner.v.bak
-/lcbFull.v.bak
 /orb.asm.rpt
 /orb.done
 /orb.eda.rpt
@@ -12,5 +9,4 @@
 /orb_nativelink_simulation.rpt
 /serv_req_info.txt
 *.qws
-/UARTRX.v.bak
-/UARTTXBIG.v.bak
+*.v.bak

@@ -38,6 +38,7 @@ reg [11:0]FF_DATA, LCB_IDATA;
 wire FF_RDEN, FF_SWCH, LCB_WREN, LCB_RDEN;
 reg MEM1_RE, MEM2_RE, FF_M2_RE, FF_M1_RE, LCB_M1_RE, LCB_M2_RE;
 reg MEM1_WE, MEM2_WE;
+wire LC1_BUSY, LC3_BUSY;
 
 always@(*)begin
 	case(FF_SWCH)
@@ -144,6 +145,7 @@ lcbFull lc3(
 	.wrdOut(LCB_ODATA),
 	.wrdAddr(LCB_OADDR),
 	.wren(LCB_WREN),
+	.busy(LC3_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr3),
 	.dataROMaddr(LCB_ROM_data3),
@@ -212,6 +214,7 @@ lcbFull lc1(
 	//.wrdOut(LCB_ODATA),
 	//.wrdAddr(LCB_OADDR),
 	//.wren(LCB_WREN),
+	.busy(LC1_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr1),
 	.dataROMaddr(LCB_ROM_data1),

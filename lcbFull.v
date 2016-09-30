@@ -7,6 +7,7 @@ module lcbFull(
 	output reg [11:0]wrdOut,
 	output reg [9:0]wrdAddr,
 	output reg wren,
+	output reg busy,
 
 	output reg [8:0]addrROMaddr,
 	input [14:0]dataROMaddr,
@@ -31,6 +32,7 @@ assign test = cnt_bytes[3];
 
 always@(posedge clk or negedge reset) begin
 	if (!reset)begin
+		busy <= 0;
 		cnt_bytes <= 0;
 		state <= 0;
 		wren <= 0;
@@ -97,38 +99,42 @@ always@(posedge clk or negedge reset) begin
 					measure_contact <= rawData[0];
 				end
 			end
-			1: begin
+			1, 2: begin
+busy <= 1;			// master signal, when got a byte here - write it to memory
+			end	
+			3: begin
 				rom_address <= rom_address + 1'b1;			//start writing next address to a variable
 				if (full_addr == 15) begin 
-						state <= 5'd11;
+						state <= 5'd13;
 				end else begin
 					if (is_contact == 1) begin				//if received measure is contact
 							oldRdEn <= 1;						//go read the old value
-							state <= 5'd2;							//and proceed to the next step
+							state <= 5'd4;							//and proceed to the next step
 					end else begin						//otherwise
-						state <= 5'd8;							//skip few steps
+						state <= 5'd10;							//skip few steps
 					end
 				end
 			end
-			2, 3, 4: state <= state + 1'b1;				//wait for old word to set to input
-			5: begin
+			4, 5, 6: state <= state + 1'b1;				//wait for old word to set to input
+			7: begin
 				old_word <= oldWrd;						//latch an old word
 				oldRdEn <= 0;						//drop the read-enable signal
 				state <= state + 1'b1;
 			end
-			6: begin
+			8: begin
 				old_word[bit_contact] <= measure_contact;	//set new bit to old word
 				state <= state + 1'b1;
 			end
-			7: begin
+			9: begin
 				wrdOut <= old_word;						// set the edited word to output, overwriting previous value
 				state <= state + 1'b1;
 			end
-			8, 9, 10: begin						//came here with the output word and address buses set (first step else links here)
+			10, 11, 12: begin						//came here with the output word and address buses set (first step else links here)
 				wren <= 1;								// activate the write-enable and wait for group memory to react on it
 				state <= state + 1'b1;
 			end
-			11: begin								// final checks and moving to the start
+			13: begin								// final checks and moving to the start
+busy <= 0;			
 				oldRdEn <= 0;
 				if (!rxValid) begin
 					if (rom_address == 384) rom_address <= 0;
