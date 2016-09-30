@@ -98,6 +98,7 @@ M8 frameFormer( .reset(reset), .clk(clk12),	// 12'582'912
 //---------------------------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------------------------
 // LCB-3 FULL IN/OUT
+
 wire [7:0]LCB_rq_data3;
 wire [8:0]LCB_rq_addr3;
 wire [7:0]LCB_rx_wire3;
@@ -113,9 +114,9 @@ UARTTXBIG rqLCB3(
 	.cycle(LCB_RQ_Number + 1'b1),	// number of the request (from m8) + shift, to give LCB time to respond
 	.data(LCB_rq_data3),			// data to transmit (from ROM)
 	.addr(LCB_rq_addr3),			// address to read (to ROM)
-	.tx(UART4_TX),					// serial transmitted data
-	.dirTX(UART4_dTX),				// rs485 TX dir controller 
-	.dirRX(UART4_dRX)				// rs485 RX dir controller
+	.tx(UART1_TX),					// serial transmitted data
+	.dirTX(UART1_dTX),				// rs485 TX dir controller 
+	.dirRX(UART1_dRX)				// rs485 RX dir controller
 );
 defparam rqLCB3.BYTES = 5'd14;
 
@@ -129,7 +130,7 @@ ROMr3(
 UARTRX rxLCB3(
 	.clk(clk80), 			
 	.reset(reset),
-	.RX(UART4_RX),				// serial wire
+	.RX(UART1_RX),				// serial wire
 	.oData(LCB_rx_wire3),		// parallel data
 	.oValid(LCB_rx_val3)		// data is valid while this signal is 1
 );
@@ -171,6 +172,7 @@ wire [7:0]LCB_rx_wire1;
 wire LCB_rx_val1;
 wire [8:0]LCB_ROM_addr1;
 wire [14:0]LCB_ROM_data1;
+
 		//something went wrong from here.
 UARTTXBIG rqLCB1(
 	.reset(reset),					// global reset and enable signal
@@ -179,9 +181,9 @@ UARTTXBIG rqLCB1(
 	.cycle(LCB_RQ_Number + 1'b1),	// number of the request (from m8) + shift, to give LCB time to respond
 	.data(LCB_rq_data1),			// data to transmit (from ROM)
 	.addr(LCB_rq_addr1),			// address to read (to ROM)
-	.tx(UART1_TX),					// serial transmitted data
-	.dirTX(UART1_dTX),				// rs485 TX dir controller 
-	.dirRX(UART1_dRX)				// rs485 RX dir controller
+	.tx(UART4_TX),					// serial transmitted data
+	.dirTX(UART4_dTX),				// rs485 TX dir controller 
+	.dirRX(UART4_dRX)				// rs485 RX dir controller
 );
 defparam rqLCB1.BYTES = 5'd14;
 
@@ -192,11 +194,11 @@ ROMr1(
 	.q(LCB_rq_data1)
 );
 		// to here
-/*
+
 UARTRX rxLCB1(
 	.clk(clk80), 			
 	.reset(reset),
-	.RX(UART1_RX),				// serial wire
+	.RX(UART4_RX),				// serial wire
 	.oData(LCB_rx_wire1),		// parallel data
 	.oValid(LCB_rx_val1)		// data is valid while this signal is 1
 );
@@ -207,16 +209,16 @@ lcbFull lc1(
 	.rawData(LCB_rx_wire1),
 	.rxValid(LCB_rx_val1),
 	.LCBrqNumber(LCB_RQ_Number),
-//	.wrdOut(LCB_ODATA),
-//	.wrdAddr(LCB_OADDR),
-//	.wren(LCB_WREN),
+	//.wrdOut(LCB_ODATA),
+	//.wrdAddr(LCB_OADDR),
+	//.wren(LCB_WREN),
 
 	.addrROMaddr(LCB_ROM_addr1),
 	.dataROMaddr(LCB_ROM_data1),
 	
-//	.oldWrd(LCB_IDATA),
-//	.oldWrdAddr(LCB_RADR),
-//	.oldRdEn(LCB_RDEN),
+	//.oldWrd(LCB_IDATA),
+	//.oldWrdAddr(LCB_RADR),
+	//.oldRdEn(LCB_RDEN),
 	
 //	.test(<some_new_test_signal>)
 );
@@ -228,7 +230,7 @@ LCBaddr1(
 	.outclock(clk80),
 	.q(LCB_ROM_data1)
 );
-*/
+
 
 //----------------^^^^^^-21.09.2016 update-----------------------
 assign testGreen = MEM2_WE;			//ch4

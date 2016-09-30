@@ -12,3 +12,5 @@
 /orb_nativelink_simulation.rpt
 /serv_req_info.txt
 *.qws
+/UARTRX.v.bak
+/UARTTXBIG.v.bak

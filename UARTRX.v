@@ -45,7 +45,12 @@ module UARTRX
 		Valid <= 0;
 	end else begin
 		if (Valid) begin
-			if (delay == 4'd9) begin delay <= 0; Valid <= 0; end else begin delay <= delay + 1'b1; end
+			if (delay == 4'd9) begin 
+				delay <= 0; 
+				Valid <= 0; 
+			end else begin 
+				delay <= delay + 1'b1; 
+			end
 		end
 		
 
