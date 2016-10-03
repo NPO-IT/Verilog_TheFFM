@@ -152,7 +152,7 @@ lcbFull lc3(
 	.wrdOut/*(LCB3_ODATA)*/(LCB_ODATA),
 	.wrdAddr/*(LCB3_OADDR)*/(LCB_OADDR),
 	.wren/*(LCB3_WREN)*/(LCB_WREN),
-	.busy/*(LC3_BUSY)*/(LC_BUSY),
+	.busy(LC3_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr3),
 	.dataROMaddr(LCB_ROM_data3),
