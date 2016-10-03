@@ -38,7 +38,14 @@ reg [11:0]FF_DATA, LCB_IDATA;
 wire FF_RDEN, FF_SWCH, LCB_WREN, LCB_RDEN;
 reg MEM1_RE, MEM2_RE, FF_M2_RE, FF_M1_RE, LCB_M1_RE, LCB_M2_RE;
 reg MEM1_WE, MEM2_WE;
+
+//----------------vvvvvv-03.10.2016 update-----------------------
 wire LC1_BUSY, LC3_BUSY;
+wire[9:0]LCB1_RADR, LCB3_RADR;
+wire[9:0]LCB1_OADDR, LCB3_OADDR;
+wire[11:0]LCB1_ODATA, LCB3_ODATA, LCB1_IDATA, LCB3_IDATA;
+wire LCB1_WREN, LCB1_RDEN, LCB3_WREN, LCB3_RDEN;
+//----------------^^^^^^-03.10.2016 update-----------------------
 
 always@(*)begin
 	case(FF_SWCH)
@@ -142,17 +149,17 @@ lcbFull lc3(
 	.rawData(LCB_rx_wire3),
 	.rxValid(LCB_rx_val3),
 	.LCBrqNumber(LCB_RQ_Number),
-	.wrdOut(LCB_ODATA),
-	.wrdAddr(LCB_OADDR),
-	.wren(LCB_WREN),
-	.busy(LC3_BUSY),
+	.wrdOut/*(LCB3_ODATA)*/(LCB_ODATA),
+	.wrdAddr/*(LCB3_OADDR)*/(LCB_OADDR),
+	.wren/*(LCB3_WREN)*/(LCB_WREN),
+	.busy/*(LC3_BUSY)*/(LC_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr3),
 	.dataROMaddr(LCB_ROM_data3),
 	
-	.oldWrd(LCB_IDATA),
-	.oldWrdAddr(LCB_RADR),
-	.oldRdEn(LCB_RDEN),
+	.oldWrd/*(LCB3_IDATA)*/(LCB_IDATA),
+	.oldWrdAddr/*(LCB3_RADR)*/(LCB_RADR),
+	.oldRdEn/*(LCB3_RDEN)*/(LCB_RDEN),
 	
 	.test(combinetest)
 );
@@ -211,17 +218,17 @@ lcbFull lc1(
 	.rawData(LCB_rx_wire1),
 	.rxValid(LCB_rx_val1),
 	.LCBrqNumber(LCB_RQ_Number),
-	//.wrdOut(LCB_ODATA),
-	//.wrdAddr(LCB_OADDR),
-	//.wren(LCB_WREN),
-	.busy(LC1_BUSY),
+	//.wrdOut(LCB1_ODATA),
+	//.wrdAddr(LCB1_OADDR),
+	//.wren(LCB1_WREN),
+	//.busy(LC1_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr1),
 	.dataROMaddr(LCB_ROM_data1),
 	
-	//.oldWrd(LCB_IDATA),
-	//.oldWrdAddr(LCB_RADR),
-	//.oldRdEn(LCB_RDEN),
+	//.oldWrd(LCB1_IDATA),
+	//.oldWrdAddr(LCB1_RADR),
+	//.oldRdEn(LCB1_RDEN),
 	
 //	.test(<some_new_test_signal>)
 );
@@ -233,13 +240,46 @@ LCBaddr1(
 	.outclock(clk80),
 	.q(LCB_ROM_data1)
 );
-
-
 //----------------^^^^^^-21.09.2016 update-----------------------
-assign testGreen = MEM2_WE;			//ch4
-assign testBlue = LCB_WREN;			//ch2
+
+//-----------------------03.10.2016 update-vvvvvvvv--------------
+/*
+Distributor(
+	//basic
+	.clk(clk80),
+	.reset(reset),
+	//busy
+	.busy_1(LC3_BUSY),
+	.busy_2(LC1_BUSY),
+	//common inouts
+	.commWrdOut(LCB_ODATA),
+	.commWrdAddr(LCBOADDR),
+	.commWren(LCB_WREN),
+	.commOldWrd(LCB_IDATA),
+	.commOldWrdAddr(LCB_RADR),
+	.commOldRdEn(LCB_RDEN),
+	//individual inouts
+	.wrdOut_1(LCB3_ODATA),
+	.wrdAddr_1(LCB3_OADDR),
+	.wren_1(LCB3_WREN),
+	.oldWrd_1(LCB3_IDATA),
+	.oldWrdAddr_1(LCB3_RADR),
+	.oldRdEn_1(LCB3_RDEN),
+	//individual inouts
+	.wrdOut_2(LCB1_ODATA),
+	.wrdAddr_2(LCB1_OADDR),
+	.wren_2(LCB1_WREN),
+	.oldWrd_2(LCB1_IDATA),
+	.oldWrdAddr_2(LCB1_RADR),
+	.oldRdEn_2(LCB1_RDEN)
+);
+*/
+//----------------^^^^^^-03.10.2016 update-----------------------
+
+assign testGreen = LC1_BUSY;		//ch4
+assign testBlue = LCB1_WREN;		//ch2
 assign testYellow = LCB_rx_val3;	//ch1
-assign testRed = MEM2_RE;			//ch3
+assign testRed = LCB_WREN;			//ch3
 
 
 endmodule

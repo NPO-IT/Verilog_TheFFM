@@ -5,7 +5,7 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 9.700 ns
+Actual Time    : 6.700 ns
 From           : UART1_RX
 To             : UARTRX:rxLCB3|sync[0]
 From Clock     : --
@@ -15,17 +15,17 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 22.600 ns
-From           : M8:frameFormer|oSwitch
-To             : testGreen
-From Clock     : clk100
+Actual Time    : 19.900 ns
+From           : UARTTXBIG:rqLCB1|dirTX
+To             : UART4_dTX
+From Clock     : clk80
 To Clock       : --
 Failed Paths   : 0
 
 Type           : Worst-case th
 Slack          : N/A
 Required Time  : None
-Actual Time    : -7.500 ns
+Actual Time    : -4.500 ns
 From           : UART1_RX
 To             : UARTRX:rxLCB3|sync[0]
 From Clock     : --
@@ -35,7 +35,7 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk80'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 38.17 MHz ( period = 26.200 ns )
+Actual Time    : 37.88 MHz ( period = 26.400 ns )
 From           : globalReset:aClear|lpm_counter:count_rtl_1|alt_counter_f10ke:wysi_counter|counter_cell[0]
 To             : globalReset:aClear|lpm_counter:count_rtl_1|alt_counter_f10ke:wysi_counter|counter_cell[63]
 From Clock     : clk80
@@ -45,8 +45,8 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk100'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 39.22 MHz ( period = 25.500 ns )
-From           : M8:frameFormer|cntLCBrq[8]
+Actual Time    : 40.32 MHz ( period = 24.800 ns )
+From           : M8:frameFormer|cntLCBrq[6]
 To             : M8:frameFormer|oLCB3_rq
 From Clock     : clk100
 To Clock       : clk100
