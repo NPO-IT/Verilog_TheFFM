@@ -20,16 +20,17 @@ module TheFFM (
 	output testGreen,
 	output testRed
 );
+wire clk12, clk5;
+wire reset;
 
 globalReset aClear(.clk(clk80), .rst(reset));	// global uber aclr imitation
 defparam aClear.delayInSec = 1;
+defparam aClear.clockFreq = 80000000;//8;		//super-fast-reset-for-simulation
 
 divReg clk80Divider(.reset(reset), .iClkIN(clk80), .Outdiv16(clk5)); 	// clk generator 80MHz (5MHz for UART transmissions)
 divReg clk100Divider(.reset(reset), .iClkIN(clk100), .Outdiv8(clk12)); 	// clk generator 100'663'296Hz (~12,5MHz for M8-former. "Orbita Frame")
 
 //-------------------------------------------------------------------------------------------------------
-wire clk12, clk5;
-wire reset/* = 0*/;
 wire [4:0]LCB_RQ_Number;
 wire [9:0]FF_RADR, LCB_RADR, LCB_OADDR; 
 reg [9:0]MEM2_RADR, MEM1_RADR;
@@ -128,7 +129,7 @@ UARTTXBIG rqLCB3(
 );
 defparam rqLCB3.BYTES = 5'd14;
 
-ROMr3( 
+ROMr3 modelsim_1( 
 	.address(LCB_rq_addr3),
 	.inclock(clk80),
 	.outclock(clk80),
@@ -149,23 +150,25 @@ lcbFull lc3(
 	.rawData(LCB_rx_wire3),
 	.rxValid(LCB_rx_val3),
 	.LCBrqNumber(LCB_RQ_Number),
-	.wrdOut/*(LCB3_ODATA)*/(LCB_ODATA),
-	.wrdAddr/*(LCB3_OADDR)*/(LCB_OADDR),
-	.wren/*(LCB3_WREN)*/(LCB_WREN),
+	.wrdOut(LCB3_ODATA),//(LCB_ODATA),
+	.wrdAddr(LCB3_OADDR),//(LCB_OADDR),
+	.wren(LCB3_WREN),//(LCB_WREN),
 	.busy(LC3_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr3),
 	.dataROMaddr(LCB_ROM_data3),
 	
-	.oldWrd/*(LCB3_IDATA)*/(LCB_IDATA),
-	.oldWrdAddr/*(LCB3_RADR)*/(LCB_RADR),
-	.oldRdEn/*(LCB3_RDEN)*/(LCB_RDEN),
+	.oldWrd(LCB3_IDATA),//(LCB_IDATA),
+	.oldWrdAddr(LCB3_RADR),//(LCB_RADR),
+	.oldRdEn(LCB3_RDEN),//(LCB_RDEN),
 	
 	.test(combinetest)
 );
 
+
+
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
-LCBaddr3(
+LCBaddr3 modelsim_2(
 	.address(LCB_ROM_addr3),
 	.inclock(clk80),
 	.outclock(clk80),
@@ -196,7 +199,7 @@ UARTTXBIG rqLCB1(
 );
 defparam rqLCB1.BYTES = 5'd14;
 
-ROMr1( 
+ROMr1 modelsim_3( 
 	.address(LCB_rq_addr1),
 	.inclock(clk80),
 	.outclock(clk80),
@@ -218,23 +221,22 @@ lcbFull lc1(
 	.rawData(LCB_rx_wire1),
 	.rxValid(LCB_rx_val1),
 	.LCBrqNumber(LCB_RQ_Number),
-	//.wrdOut(LCB1_ODATA),
-	//.wrdAddr(LCB1_OADDR),
-	//.wren(LCB1_WREN),
-	//.busy(LC1_BUSY),
+	.wrdOut(LCB1_ODATA),
+	.wrdAddr(LCB1_OADDR),
+	.wren(LCB1_WREN),
+	.busy(LC1_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr1),
 	.dataROMaddr(LCB_ROM_data1),
 	
-	//.oldWrd(LCB1_IDATA),
-	//.oldWrdAddr(LCB1_RADR),
-	//.oldRdEn(LCB1_RDEN),
+	.oldWrd(LCB1_IDATA),
+	.oldWrdAddr(LCB1_RADR),
+	.oldRdEn(LCB1_RDEN)
 	
-//	.test(<some_new_test_signal>)
 );
 
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
-LCBaddr1(
+LCBaddr1 modelsim_4(
 	.address(LCB_ROM_addr1),
 	.inclock(clk80),
 	.outclock(clk80),
@@ -243,8 +245,8 @@ LCBaddr1(
 //----------------^^^^^^-21.09.2016 update-----------------------
 
 //-----------------------03.10.2016 update-vvvvvvvv--------------
-/*
-Distributor(
+
+Distributor modelsim_5(
 	//basic
 	.clk(clk80),
 	.reset(reset),
@@ -253,7 +255,7 @@ Distributor(
 	.busy_2(LC1_BUSY),
 	//common inouts
 	.commWrdOut(LCB_ODATA),
-	.commWrdAddr(LCBOADDR),
+	.commWrdAddr(LCB_OADDR),
 	.commWren(LCB_WREN),
 	.commOldWrd(LCB_IDATA),
 	.commOldWrdAddr(LCB_RADR),
@@ -273,13 +275,13 @@ Distributor(
 	.oldWrdAddr_2(LCB1_RADR),
 	.oldRdEn_2(LCB1_RDEN)
 );
-*/
+
 //----------------^^^^^^-03.10.2016 update-----------------------
 
-assign testGreen = LC1_BUSY;		//ch4
+//assign testGreen = LC1_BUSY;		//ch4
 assign testBlue = LCB1_WREN;		//ch2
 assign testYellow = LCB_rx_val3;	//ch1
-assign testRed = LCB_WREN;			//ch3
+//assign testRed = LCB_WREN;			//ch3
 
 
 endmodule

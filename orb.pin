@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Mon Oct 03 14:30:15 2016
+File Generation Date & Time: Tue Oct 04 18:43:49 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -197,7 +197,7 @@ GND*                         : 152       :        :                   :         
 GND*                         : 153       :        :                   :         :           :                
 GND*                         : 154       :        :                   :         :           :                
 GND_INT                      : 155       : gnd    :                   :         :           :                
-Orb_wordValid                : 156       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 156       :        :                   :         :           :                
 GND*                         : 157       :        :                   :         :           :                
 GND*                         : 158       :        :                   :         :           :                
 VCC_INT                      : 159       : power  :                   : 2.5V    :           :                
@@ -213,7 +213,7 @@ GND*                         : 168       :        :                   :         
 GND*                         : 169       :        :                   :         :           :                
 VCC_INT                      : 170       : power  :                   : 2.5V    :           :                
 GND*                         : 171       :        :                   :         :           :                
-GND*                         : 172       :        :                   :         :           :                
+Orb_wordValid                : 172       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 173       :        :                   :         :           :                
 GND*                         : 174       :        :                   :         :           :                
 GND*                         : 175       :        :                   :         :           :                

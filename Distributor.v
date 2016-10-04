@@ -28,7 +28,9 @@ module Distributor(
 	input oldRdEn_2
 );
 
-wire [1:0]trigger = {busy_1, busy_2};
+wire [1:0]trigger;
+assign trigger[0] = busy_1;
+assign trigger[1] = busy_2;
 
 always@(posedge clk or negedge reset)
 begin
@@ -42,7 +44,7 @@ begin
 		oldWrd_2 <= 0;
 	end else begin
 		case(trigger)
-			1: begin	
+			2'd1: begin	
 				commWrdOut <= wrdOut_1;
 				commWrdAddr <= wrdAddr_1;
 				commWren <= wren_1;
@@ -50,13 +52,23 @@ begin
 				commOldWrdAddr <= oldWrdAddr_1;
 				commOldRdEn <= oldRdEn_1;
 			end
-			2: begin
+			2'd2: begin
 				commWrdOut <= wrdOut_2;
 				commWrdAddr <= wrdAddr_2;
 				commWren <= wren_2;
 				oldWrd_2 <= commOldWrd;
 				commOldWrdAddr <= oldWrdAddr_2;
 				commOldRdEn <= oldRdEn_2;
+			end
+			default: begin
+		//		commWren <= 0;
+				commWrdOut <= 0;
+				commWrdAddr <= 0;
+				commWren <= 0;
+				commOldWrdAddr <= 0;
+				commOldRdEn <= 0;
+				oldWrd_1 <= 0;
+				oldWrd_2 <= 0;
 			end
 		endcase
 	end

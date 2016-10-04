@@ -54,7 +54,8 @@ always@(posedge clk or negedge reset) begin
 			0: begin
 				addrROMaddr <= rom_address;					// always get fresh orb address
 				wren <= 0;							// drop the write-enable signal
-				
+				busy <= 0;
+
 // need to add completeness check here, to avoid signal failures
 
 				if (rxValid) begin							// if got valid data from receiver
