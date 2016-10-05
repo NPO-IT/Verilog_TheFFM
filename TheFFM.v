@@ -123,9 +123,9 @@ UARTTXBIG rqLCB3(
 	.cycle(LCB_RQ_Number + 1'b1),	// number of the request (from m8) + shift, to give LCB time to respond
 	.data(LCB_rq_data3),			// data to transmit (from ROM)
 	.addr(LCB_rq_addr3),			// address to read (to ROM)
-	.tx(UART1_TX),					// serial transmitted data
-	.dirTX(UART1_dTX),				// rs485 TX dir controller 
-	.dirRX(UART1_dRX)				// rs485 RX dir controller
+	.tx(UART4_TX),					// serial transmitted data
+	.dirTX(UART4_dTX),				// rs485 TX dir controller 
+	.dirRX(UART4_dRX)				// rs485 RX dir controller
 );
 defparam rqLCB3.BYTES = 5'd14;
 
@@ -139,7 +139,7 @@ ROMr3 modelsim_1(
 UARTRX rxLCB3(
 	.clk(clk80), 			
 	.reset(reset),
-	.RX(UART1_RX),				// serial wire
+	.RX(UART4_RX),				// serial wire
 	.oData(LCB_rx_wire3),		// parallel data
 	.oValid(LCB_rx_val3)		// data is valid while this signal is 1
 );
@@ -165,8 +165,6 @@ lcbFull lc3(
 	.test(combinetest)
 );
 
-
-
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
 LCBaddr3 modelsim_2(
 	.address(LCB_ROM_addr3),
@@ -177,6 +175,7 @@ LCBaddr3 modelsim_2(
 
 //-----------------------21.09.2016 update-vvvvvvvv--------------
 // request uart block
+// LCB-1 FULL IN/OUT
 
 wire [7:0]LCB_rq_data1;
 wire [8:0]LCB_rq_addr1;
@@ -185,7 +184,6 @@ wire LCB_rx_val1;
 wire [8:0]LCB_ROM_addr1;
 wire [14:0]LCB_ROM_data1;
 
-		//something went wrong from here.
 UARTTXBIG rqLCB1(
 	.reset(reset),					// global reset and enable signal
 	.clk(clk5),						// actual needed baudrate
@@ -193,24 +191,23 @@ UARTTXBIG rqLCB1(
 	.cycle(LCB_RQ_Number + 1'b1),	// number of the request (from m8) + shift, to give LCB time to respond
 	.data(LCB_rq_data1),			// data to transmit (from ROM)
 	.addr(LCB_rq_addr1),			// address to read (to ROM)
-	.tx(UART4_TX),					// serial transmitted data
-	.dirTX(UART4_dTX),				// rs485 TX dir controller 
-	.dirRX(UART4_dRX)				// rs485 RX dir controller
+	.tx(UART1_TX),					// serial transmitted data
+	.dirTX(UART1_dTX),				// rs485 TX dir controller 
+	.dirRX(UART1_dRX)				// rs485 RX dir controller
 );
 defparam rqLCB1.BYTES = 5'd14;
 
-ROMr1 modelsim_3( 
+ROMr1( 
 	.address(LCB_rq_addr1),
 	.inclock(clk80),
 	.outclock(clk80),
 	.q(LCB_rq_data1)
 );
-		// to here
 
 UARTRX rxLCB1(
 	.clk(clk80), 			
 	.reset(reset),
-	.RX(UART4_RX),				// serial wire
+	.RX(UART1_RX),				// serial wire
 	.oData(LCB_rx_wire1),		// parallel data
 	.oValid(LCB_rx_val1)		// data is valid while this signal is 1
 );
@@ -221,22 +218,21 @@ lcbFull lc1(
 	.rawData(LCB_rx_wire1),
 	.rxValid(LCB_rx_val1),
 	.LCBrqNumber(LCB_RQ_Number),
-	.wrdOut(LCB1_ODATA),
-	.wrdAddr(LCB1_OADDR),
-	.wren(LCB1_WREN),
+	.wrdOut(LCB1_ODATA),//(LCB_ODATA),
+	.wrdAddr(LCB1_OADDR),//(LCB_OADDR),
+	.wren(LCB1_WREN),//(LCB_WREN),
 	.busy(LC1_BUSY),
 
 	.addrROMaddr(LCB_ROM_addr1),
 	.dataROMaddr(LCB_ROM_data1),
 	
-	.oldWrd(LCB1_IDATA),
-	.oldWrdAddr(LCB1_RADR),
-	.oldRdEn(LCB1_RDEN)
-	
+	.oldWrd(LCB1_IDATA),//(LCB_IDATA),
+	.oldWrdAddr(LCB1_RADR),//(LCB_RADR),
+	.oldRdEn(LCB1_RDEN),//(LCB_RDEN),
 );
 
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
-LCBaddr1 modelsim_4(
+LCBaddr1(
 	.address(LCB_ROM_addr1),
 	.inclock(clk80),
 	.outclock(clk80),
@@ -280,8 +276,8 @@ Distributor modelsim_5(
 
 //assign testGreen = LC1_BUSY;		//ch4
 assign testBlue = LCB1_WREN;		//ch2
-assign testYellow = LCB_rx_val3;	//ch1
-//assign testRed = LCB_WREN;			//ch3
+assign testYellow = LCB_rx_val1;	//ch1
+assign testRed = LCB_WREN;			//ch3
 
 
 endmodule

@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Tue Oct 04 18:43:49 2016
+File Generation Date & Time: Wed Oct 05 16:06:04 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -209,11 +209,11 @@ GND*                         : 164       :        :                   :         
 GND_INT                      : 165       : gnd    :                   :         :           :                
 GND*                         : 166       :        :                   :         :           :                
 GND*                         : 167       :        :                   :         :           :                
-GND*                         : 168       :        :                   :         :           :                
+Orb_wordValid                : 168       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 169       :        :                   :         :           :                
 VCC_INT                      : 170       : power  :                   : 2.5V    :           :                
 GND*                         : 171       :        :                   :         :           :                
-Orb_wordValid                : 172       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 172       :        :                   :         :           :                
 GND*                         : 173       :        :                   :         :           :                
 GND*                         : 174       :        :                   :         :           :                
 GND*                         : 175       :        :                   :         :           :                
