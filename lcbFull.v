@@ -54,7 +54,7 @@ always@(posedge clk or negedge reset) begin
 			0: begin
 				addrROMaddr <= rom_address;					// always get fresh orb address
 				wren <= 0;							// drop the write-enable signal
-				busy <= 0;
+busy <= 0;
 
 // need to add completeness check here, to avoid signal failures
 
@@ -80,21 +80,25 @@ always@(posedge clk or negedge reset) begin
 							measure1[7:0] = rawData[7:0];		// at this moment we got the full first measure
 							wrdOut <= {1'b0, measure1, 1'b0};	// and set it to output (will overwrite, if needed)
 							state <= 5'd1;						// go handle the measure (check whether it's analog or contact)
+busy <= 1;			// master signal, when got a byte here - write it to memory
 						end
 						2,7,12:begin
 							measure2[7:0] = rawData[7:0];
 							wrdOut <= {1'b0, measure2, 1'b0}; 
 							state <= 5'd1;
+busy <= 1;			// master signal, when got a byte here - write it to memory
 						end
 						3,8,13:begin
 							measure3[7:0] = rawData[7:0];
 							wrdOut <= {1'b0, measure3, 1'b0}; 
 							state <= 5'd1;
+busy <= 1;			// master signal, when got a byte here - write it to memory
 						end
 						4,9,14:begin
 							measure4[7:0] = rawData[7:0];
 							wrdOut <= {1'b0, measure4, 1'b0}; 
 							state <= 5'd1;
+busy <= 1;			// master signal, when got a byte here - write it to memory
 						end
 					endcase
 					measure_contact <= rawData[0];
@@ -102,7 +106,6 @@ always@(posedge clk or negedge reset) begin
 			end
 			1, 2: begin
 			state <= state + 1'b1;
-busy <= 1;			// master signal, when got a byte here - write it to memory
 			end	
 			3: begin
 				rom_address <= rom_address + 1'b1;			//start writing next address to a variable

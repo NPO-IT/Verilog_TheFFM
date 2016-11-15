@@ -4,7 +4,7 @@
 // MODULE: lpm_rom 
 
 // ============================================================
-// File Name: ROMr4.v
+// File Name: LCBaddr2.v
 // Megafunction Name(s):
 // 			lpm_rom
 //
@@ -36,7 +36,7 @@
 // synopsys translate_off
 `timescale 1 ps / 1 ps
 // synopsys translate_on
-module ROMr4 (
+module LCBaddr2 (
 	address,
 	inclock,
 	outclock,
@@ -45,10 +45,10 @@ module ROMr4 (
 	input	[8:0]  address;
 	input	  inclock;
 	input	  outclock;
-	output	[7:0]  q;
+	output	[14:0]  q;
 
-	wire [7:0] sub_wire0;
-	wire [7:0] q = sub_wire0[7:0];
+	wire [14:0] sub_wire0;
+	wire [14:0] q = sub_wire0[14:0];
 
 	lpm_rom	lpm_rom_component (
 				.outclock (outclock),
@@ -60,14 +60,14 @@ module ROMr4 (
 		lpm_rom_component.intended_device_family = "FLEX10KE",
 		lpm_rom_component.lpm_address_control = "REGISTERED",
 `ifdef NO_PLI
-		lpm_rom_component.lpm_file = "dROMb4.rif"
+		lpm_rom_component.lpm_file = "hROMb2.rif"
 `else
-		lpm_rom_component.lpm_file = "dROMb4.hex"
+		lpm_rom_component.lpm_file = "hROMb2.hex"
 `endif
 ,
 		lpm_rom_component.lpm_outdata = "REGISTERED",
 		lpm_rom_component.lpm_type = "LPM_ROM",
-		lpm_rom_component.lpm_width = 8,
+		lpm_rom_component.lpm_width = 15,
 		lpm_rom_component.lpm_widthad = 9;
 
 
@@ -93,8 +93,8 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "dROMb4.hex"
-// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "448"
+// Retrieval info: PRIVATE: MIFfilename STRING "hROMb2.hex"
+// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "384"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 // Retrieval info: PRIVATE: RegAdd NUMERIC "1"
@@ -104,28 +104,28 @@ endmodule
 // Retrieval info: PRIVATE: SingleClock NUMERIC "0"
 // Retrieval info: PRIVATE: UseDQRAM NUMERIC "0"
 // Retrieval info: PRIVATE: WidthAddr NUMERIC "9"
-// Retrieval info: PRIVATE: WidthData NUMERIC "8"
+// Retrieval info: PRIVATE: WidthData NUMERIC "15"
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
-// Retrieval info: CONSTANT: LPM_FILE STRING "dROMb4.hex"
+// Retrieval info: CONSTANT: LPM_FILE STRING "hROMb2.hex"
 // Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
-// Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "8"
+// Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "15"
 // Retrieval info: CONSTANT: LPM_WIDTHAD NUMERIC "9"
 // Retrieval info: USED_PORT: address 0 0 9 0 INPUT NODEFVAL address[8..0]
 // Retrieval info: USED_PORT: inclock 0 0 0 0 INPUT NODEFVAL inclock
 // Retrieval info: USED_PORT: outclock 0 0 0 0 INPUT NODEFVAL outclock
-// Retrieval info: USED_PORT: q 0 0 8 0 OUTPUT NODEFVAL q[7..0]
+// Retrieval info: USED_PORT: q 0 0 15 0 OUTPUT NODEFVAL q[14..0]
 // Retrieval info: CONNECT: @address 0 0 9 0 address 0 0 9 0
-// Retrieval info: CONNECT: q 0 0 8 0 @q 0 0 8 0
+// Retrieval info: CONNECT: q 0 0 15 0 @q 0 0 15 0
 // Retrieval info: CONNECT: @inclock 0 0 0 0 inclock 0 0 0 0
 // Retrieval info: CONNECT: @outclock 0 0 0 0 outclock 0 0 0 0
 // Retrieval info: LIBRARY: lpm lpm.lpm_components.all
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr4.v TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr4.inc FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr4.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr4.bsf TRUE FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr4_inst.v FALSE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr4_bb.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL LCBaddr2.v TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL LCBaddr2.inc FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL LCBaddr2.cmp TRUE
+// Retrieval info: GEN_FILE: TYPE_NORMAL LCBaddr2.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL LCBaddr2_inst.v FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL LCBaddr2_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

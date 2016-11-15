@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Wed Oct 05 16:06:04 2016
+File Generation Date & Time: Mon Nov 14 16:37:25 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -79,12 +79,12 @@ UART3_dTX                    : 34        : output : LVTTL/LVCMOS      :         
 UART3_dRX                    : 35        : output : LVTTL/LVCMOS      :         :           : Y              
 UART3_RX                     : 36        : input  : LVTTL/LVCMOS      :         :           : Y              
 VCC_IO                       : 37        : power  :                   : 3.3V    :           :                
-GND*                         : 38        :        :                   :         :           :                
-GND*                         : 39        :        :                   :         :           :                
+UART2_TX                     : 38        : output : LVTTL/LVCMOS      :         :           : Y              
+UART2_dTX                    : 39        : output : LVTTL/LVCMOS      :         :           : Y              
 VCC_INT                      : 40        : power  :                   : 2.5V    :           :                
-GND*                         : 41        :        :                   :         :           :                
+UART2_dRX                    : 41        : output : LVTTL/LVCMOS      :         :           : Y              
 GND_INT                      : 42        : gnd    :                   :         :           :                
-GND*                         : 43        :        :                   :         :           :                
+UART2_RX                     : 43        : input  : LVTTL/LVCMOS      :         :           : Y              
 GND*                         : 44        :        :                   :         :           :                
 GND*                         : 45        :        :                   :         :           :                
 GND*                         : 46        :        :                   :         :           :                
@@ -187,7 +187,7 @@ GND*                         : 142       :        :                   :         
 GND*                         : 143       :        :                   :         :           :                
 GND*                         : 144       :        :                   :         :           :                
 GND_INT                      : 145       : gnd    :                   :         :           :                
-GND*                         : 146       :        :                   :         :           :                
+Orb_wordValid                : 146       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 147       :        :                   :         :           :                
 GND*                         : 148       :        :                   :         :           :                
 GND*                         : 149       :        :                   :         :           :                
@@ -209,7 +209,7 @@ GND*                         : 164       :        :                   :         
 GND_INT                      : 165       : gnd    :                   :         :           :                
 GND*                         : 166       :        :                   :         :           :                
 GND*                         : 167       :        :                   :         :           :                
-Orb_wordValid                : 168       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 168       :        :                   :         :           :                
 GND*                         : 169       :        :                   :         :           :                
 VCC_INT                      : 170       : power  :                   : 2.5V    :           :                
 GND*                         : 171       :        :                   :         :           :                

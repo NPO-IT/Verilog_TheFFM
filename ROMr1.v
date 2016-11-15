@@ -60,9 +60,9 @@ module ROMr1 (
 		lpm_rom_component.intended_device_family = "FLEX10KE",
 		lpm_rom_component.lpm_address_control = "REGISTERED",
 `ifdef NO_PLI
-		lpm_rom_component.lpm_file = "dROMb3.rif"
+		lpm_rom_component.lpm_file = "dROMb1.rif"
 `else
-		lpm_rom_component.lpm_file = "dROMb3.hex"
+		lpm_rom_component.lpm_file = "dROMb1.hex"
 `endif
 ,
 		lpm_rom_component.lpm_outdata = "REGISTERED",
@@ -93,8 +93,8 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ENABLED NUMERIC "0"
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING "dROMb3.hex"
-// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "384"
+// Retrieval info: PRIVATE: MIFfilename STRING "dROMb1.hex"
+// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "448"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 // Retrieval info: PRIVATE: RegAdd NUMERIC "1"
@@ -108,7 +108,7 @@ endmodule
 // Retrieval info: PRIVATE: rden NUMERIC "0"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
 // Retrieval info: CONSTANT: LPM_ADDRESS_CONTROL STRING "REGISTERED"
-// Retrieval info: CONSTANT: LPM_FILE STRING "dROMb3.hex"
+// Retrieval info: CONSTANT: LPM_FILE STRING "dROMb1.hex"
 // Retrieval info: CONSTANT: LPM_OUTDATA STRING "REGISTERED"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "LPM_ROM"
 // Retrieval info: CONSTANT: LPM_WIDTH NUMERIC "8"
@@ -125,7 +125,7 @@ endmodule
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1.bsf TRUE FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1_inst.v FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr1_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

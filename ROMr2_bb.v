@@ -65,7 +65,7 @@ endmodule
 // Retrieval info: PRIVATE: JTAG_ID STRING "NONE"
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
 // Retrieval info: PRIVATE: MIFfilename STRING "dROMb2.hex"
-// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "384"
+// Retrieval info: PRIVATE: NUMWORDS_A NUMERIC "448"
 // Retrieval info: PRIVATE: OutputRegistered NUMERIC "1"
 // Retrieval info: PRIVATE: RAM_BLOCK_TYPE NUMERIC "0"
 // Retrieval info: PRIVATE: RegAdd NUMERIC "1"
@@ -96,7 +96,7 @@ endmodule
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2.bsf TRUE FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2_inst.v FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL ROMr2_bb.v TRUE
 // Retrieval info: LIB_FILE: lpm

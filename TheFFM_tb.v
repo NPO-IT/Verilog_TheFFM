@@ -91,9 +91,9 @@ module TheFFM_tb();
 			j=0;
 			wait(rqwire1 == 1);
 			wait(rqwire1 == 0);
-			repeat (30)@(posedge clk5);
+			//repeat (30)@(posedge clk5);
 			repeat (15) begin				// 15 bytes
-				repeat(10)@(posedge clk5);
+				repeat(1)@(posedge clk5);
 				rxwire1 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -114,9 +114,9 @@ module TheFFM_tb();
 			j2=0;
 			wait(rqwire2 == 1);
 			wait(rqwire2 == 0);
-			repeat (30)@(posedge clk5);
+			//repeat (30)@(posedge clk5);
 			repeat (15) begin				// 15 bytes
-				repeat(10)@(posedge clk5);
+				repeat(1)@(posedge clk5);
 				rxwire2 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -137,9 +137,9 @@ module TheFFM_tb();
 			j3=0;
 			wait(rqwire3 == 1);
 			wait(rqwire3 == 0);
-			repeat (30)@(posedge clk5);
+			//repeat (30)@(posedge clk5);
 			repeat (15) begin				// 15 bytes
-				repeat(10)@(posedge clk5);
+				repeat(1)@(posedge clk5);
 				rxwire3 = 0;
 				repeat (8)					// 8 bit
 				begin
@@ -160,9 +160,9 @@ module TheFFM_tb();
 			j4=0;
 			wait(rqwire4 == 1);
 			wait(rqwire4 == 0);
-			repeat (30)@(posedge clk5);
+			//repeat (30)@(posedge clk5);
 			repeat (15) begin				// 15 bytes
-				repeat(10)@(posedge clk5);
+				repeat(1)@(posedge clk5);
 				rxwire4 = 0;
 				repeat (8)					// 8 bit
 				begin

@@ -118,3 +118,6 @@ set_global_assignment -name QIP_FILE LCBaddr3.qip
 set_global_assignment -name VERILOG_FILE lcbFull.v
 set_global_assignment -name QIP_FILE LCBaddr1.qip
 set_global_assignment -name VERILOG_FILE Distributor.v
+set_global_assignment -name QIP_FILE LCBaddr4.qip
+set_global_assignment -name QIP_FILE LCBaddr2.qip
+set_global_assignment -name QIP_FILE MCM.qip
