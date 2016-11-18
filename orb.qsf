@@ -116,3 +116,4 @@ set_global_assignment -name QIP_FILE memGrp.qip
 set_global_assignment -name VERILOG_FILE lcbCombiner.v
 set_global_assignment -name QIP_FILE LCBaddr3.qip
 set_global_assignment -name VERILOG_FILE lcbFull.v
+set_global_assignment -name VERILOG_FILE Distributor.v

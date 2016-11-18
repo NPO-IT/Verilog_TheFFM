@@ -1,46 +1,43 @@
 module M8(
-/*???????? ?????????, ???????????? ? ?????????? ??????*/
+	// common
 	input reset,
 	input clk,										// 12'582'912
+	// group memory interactions
 	input [11:0]iData,
-/*?????????? ??????? ? ??????????? (?????? ?8)*/
 	output reg oSwitch,
 	output reg oRdEn,
 	output reg [9:0]oAddr,
-/*????? ???????????????? ????? ?????? ?8 ? ???????????????? ? ???????????? ?????*/	
+	// output frame signals
 	output reg oSerial,
 	output reg [11:0]oParallel,
 	output reg oValid,
-/*??????? ???????? ??? ???*/	
+	// request signals (depending on reading states)
 	output reg oLCB1_rq,
 	output reg oLCB2_rq,
 	output reg oLCB3_rq,
 	output reg oLCB4_rq,
+	output reg oMCM_rq,
 	output reg [4:0]oLCB_num
 );
+//frame variables
 reg [23:0]outWrd;
-reg [1:0]cntDiv;
-reg [4:0]cntBit;
+wire [23:0]iDoubled;
+wire [11:0]oSingled;
+reg [1:0]cntDiv, cntCcl;
+reg [4:0]cntBit, cntGrp;
 reg [2:0]cntWrd;
 reg [6:0]cntPhr;
-reg [4:0]cntGrp;
 reg [9:0]cntMem;
-reg [1:0]cntCcl;
-wire [23:0]iDoubled;
-reg [3:0]cnt1Sec;
-reg [3:0]cnt10Sec;
-reg [3:0]cnt100Sec;
-reg [3:0]cnt1000Sec;
+reg [3:0]cnt1Sec, cnt10Sec, cnt100Sec, cnt1000Sec;
+// requester variables
 reg [11:0]cntLCBrq;
-wire [11:0]oSingled;
+reg [4:0]MCM_rq_delay;
+reg oldSw, MCM_delay;
 
 assign iDoubled = {iData[11],iData[11],iData[10],iData[10],iData[9],iData[9],iData[8],iData[8],iData[7],iData[7],iData[6],iData[6],iData[5],iData[5],iData[4],iData[4],iData[3],iData[3],iData[2],iData[2],iData[1],iData[1],iData[0],iData[0]};
 assign oSingled = {outWrd[22], outWrd[20], outWrd[18], outWrd[16], outWrd[14], outWrd[12], outWrd[10], outWrd[8], outWrd[6], outWrd[4], outWrd[2], outWrd[0]};
 
 always@(posedge clk or negedge reset) begin
-
-
-
 if (~reset) begin // initial
 	cntDiv <= 1;
 	cntBit <= 0;
@@ -63,7 +60,14 @@ if (~reset) begin // initial
 	oParallel <= 0;
 	oSerial <= 0;
 	oValid <= 0;
+
+	oMCM_rq <= 0;
+	MCM_delay <= 0;
+	MCM_rq_delay <= 0;
+	oldSw <= 0;
+
 end else begin	// main
+
 	cntDiv <= cntDiv + 1'b1;
 	case (cntDiv)									// ???? ? ?????????
 		0: 	begin
@@ -119,26 +123,57 @@ end else begin	// main
 		3: begin
 			oRdEn <= 0;
 								/*all marker conditions here*/
-			if (cntBit == 0) begin					
-				case (cntPhr)							// ??????? ?????
+			if (cntBit == 0) begin
+				case (cntPhr)							// phrase marker
 					0,2,4,6,8,10,12,14,16,18,20,22,24,26,28,30,32,34,36,38,40,42,44,46,48,50,52,54,56,58,60,62,64,66,68,70,72,74,76,78,80,82,84,86,88,90,92,94,96,98,100,102,104,106,108,110,112,114,116,118,120,122,124,126:
-					if (cntWrd == 0) begin outWrd <= (outWrd | 24'b100000000000000000000000); end
+						if (cntWrd == 0) begin outWrd <= (outWrd | 24'b100000000000000000000000); end
+						// group number counter
+					1: if (cntWrd == 0) begin outWrd <= (outWrd | {24'b0}); end
+					3: if (cntWrd == 0) begin outWrd <= (outWrd | {24'b0}); end
+					5: if (cntWrd == 0) begin outWrd <= (outWrd | {cntGrp[4],cntGrp[4], 22'b0}); end
+					7: if (cntWrd == 0) begin outWrd <= (outWrd | {cntGrp[3],cntGrp[3], 22'b0}); end
+					9: if (cntWrd == 0) begin outWrd <= (outWrd | {cntGrp[2],cntGrp[2], 22'b0}); end
+					11: if (cntWrd == 0) begin outWrd <= (outWrd | {cntGrp[1],cntGrp[1], 22'b0}); end
+					13: if (cntWrd == 0) begin outWrd <= (outWrd | {cntGrp[0],cntGrp[0], 22'b0}); end
+						// time label
+/*	doesn't work. yet.
+						// ones
+					41: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1Sec[3],cnt1Sec[3], 22'b0}); end end
+					43: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1Sec[2],cnt1Sec[2], 22'b0}); end end
+					45: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1Sec[1],cnt1Sec[1], 22'b0}); end end
+					47: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1Sec[0],cnt1Sec[0], 22'b0}); end end
+						// decades
+					33: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt10Sec[3],cnt10Sec[3], 22'b0}); end end
+					35: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt10Sec[2],cnt10Sec[2], 22'b0}); end end
+					37: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt10Sec[1],cnt10Sec[1], 22'b0}); end end
+					39: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt10Sec[0],cnt10Sec[0], 22'b0}); end end
+						// hundreds
+					25: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt100Sec[3],cnt100Sec[3], 22'b0}); end end
+					27: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt100Sec[2],cnt100Sec[2], 22'b0}); end end
+					29: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt100Sec[1],cnt100Sec[1], 22'b0}); end end
+					31: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt100Sec[0],cnt100Sec[0], 22'b0}); end end
+						// thousands
+					17: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1000Sec[3],cnt1000Sec[3], 22'b0}); end end
+					19: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1000Sec[2],cnt1000Sec[2], 22'b0}); end end
+					21: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1000Sec[1],cnt1000Sec[1], 22'b0}); end end
+					23: if (cntGrp == 0) begin if (cntWrd == 0) begin outWrd <= (outWrd | {cnt1000Sec[0],cnt1000Sec[0], 22'b0}); end end
+*/					
 				endcase
 				case (cntGrp)
-					31:	begin							// ?????? ?????
+					31:	begin							// cycle marker
 
 						case (cntPhr)
 							113,121,123,127: if (cntWrd == 0) begin outWrd <= (outWrd | 24'b110000000000000000000000); 	end
 						endcase
 					end
-					default: begin						// ??????? ??????
+					default: begin						// group marker
 			
 						case (cntPhr)
 							115,117,119,125: if (cntWrd == 0) begin outWrd <= (outWrd | 24'b110000000000000000000000); end
 						endcase
 					end
 				endcase
-				case (cntCcl)							// ?????? ?????
+				case (cntCcl)							// frame cycle
 					0:	if (cntGrp == 0)
 							if (cntPhr == 15)
 								if (cntWrd == 0) begin outWrd <= (outWrd | 24'b110000000000000000000000); end
@@ -148,17 +183,36 @@ end else begin	// main
 		end
 	endcase
 
-/*LCB request*/
+//MCM request	
+// search for group switching signal
+if(oldSw != oSwitch) begin
+	MCM_delay <= 1'b1;						// enable count
+end
+oldSw <= oSwitch;
+// make a MCM_RQ signal 15x12MHz clocks
+if(MCM_delay == 1)begin
+	MCM_rq_delay <= MCM_rq_delay + 1'b1;	// count
+	if(MCM_rq_delay == 15) begin			// if done counting
+		MCM_rq_delay <= 0;					// reset counter
+		MCM_delay <= 0;						// disable count
+		oMCM_rq <= 0;						// stop requesting
+	end else begin							// otherwise
+		oMCM_rq <= 1;						// request
+	end
+end
+
+	
+//LCB request
 	cntLCBrq <= cntLCBrq + 1'b1;
 	case (cntLCBrq)
 		0: oLCB1_rq <= 1;
 		20: oLCB1_rq <= 0;
-		600: oLCB2_rq <= 1;
-		620: oLCB2_rq <= 0;
-		1200: oLCB3_rq <= 1;
-		1220: oLCB3_rq <= 0;
-		1800: oLCB4_rq <= 1;
-		1820: oLCB4_rq <= 0;
+		750: oLCB2_rq <= 1;
+		770: oLCB2_rq <= 0;
+		1500: oLCB3_rq <= 1;
+		1520: oLCB3_rq <= 0;
+		2250: oLCB4_rq <= 1;
+		2270: oLCB4_rq <= 0;
 		3021: oLCB_num <= oLCB_num + 1'b1;
 		3071: cntLCBrq <= 0;
 	endcase

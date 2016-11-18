@@ -12,7 +12,7 @@ ptn_Child6=Document-5
 [ProjectWorkspace.Frames.ChildFrames.Document-1]
 ptn_Child1=ViewFrame-0
 [ProjectWorkspace.Frames.ChildFrames.Document-1.ViewFrame-0]
-DocPathName=TheFFM.v
+DocPathName=M8.v
 DocumentCLSID={84678d98-dc76-11d0-a0d8-0020affa5bde}
 IsChildFrameDetached=False
 IsActiveChildFrame=False
@@ -22,7 +22,7 @@ AFC_IN_REPORT=False
 [ProjectWorkspace.Frames.ChildFrames.Document-2]
 ptn_Child1=ViewFrame-0
 [ProjectWorkspace.Frames.ChildFrames.Document-2.ViewFrame-0]
-DocPathName=lcbFull.v
+DocPathName=TheFFM.v
 DocumentCLSID={84678d98-dc76-11d0-a0d8-0020affa5bde}
 IsChildFrameDetached=False
 IsActiveChildFrame=False
@@ -32,10 +32,10 @@ AFC_IN_REPORT=False
 [ProjectWorkspace.Frames.ChildFrames.Document-3]
 ptn_Child1=ViewFrame-0
 [ProjectWorkspace.Frames.ChildFrames.Document-3.ViewFrame-0]
-DocPathName=M8.v
+DocPathName=Distributor.v
 DocumentCLSID={84678d98-dc76-11d0-a0d8-0020affa5bde}
 IsChildFrameDetached=False
-IsActiveChildFrame=True
+IsActiveChildFrame=False
 ptn_Child1=StateMap
 [ProjectWorkspace.Frames.ChildFrames.Document-3.ViewFrame-0.StateMap]
 AFC_IN_REPORT=False
