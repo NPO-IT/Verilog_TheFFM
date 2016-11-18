@@ -16,9 +16,9 @@ module UARTTXBIG
 	input reset,					// global reset and enable signal
 	input clk,						// actual needed baudrate (tested on 4,8 MHz)
 	input RQ,						// start transfer signal
-	input [4:0]cycle,
-	input [7:0]data,
-	output [8:0]addr,
+	input [4:0]cycle,				// number of the request (from m8) + shift, to give LCB time to respond
+	input [7:0]data,				// data to transmit (from ROM)
+	output [8:0]addr,				// address to read (to ROM)
 	output reg tx,					// serial transmitted data
 	output reg dirTX,				// rs485 TX dir controller 
 	output reg dirRX				// rs485 RX dir controller

@@ -111,21 +111,43 @@ wire LCB3_RDEN, LCB1_RDEN, LCB2_RDEN, LCB4_RDEN;
 wire LC3_busy, LC1_busy, LC2_busy, LC4_busy;
 wire LC3_over, LC1_over, LC2_over, LC4_over;
 
-UARTTXBIG rqLCB3(
-	.reset(reset),					// global reset and enable signal
-	.clk(clk5),						// actual needed baudrate
-	.RQ(LCB3_RQ_Signal),			// start transfer signal
-	.cycle(LCB_RQ_Number + 1'b1),	// number of the request (from m8) + shift, to give LCB time to respond
-	.data(LCB_rq_data3),			// data to transmit (from ROM)
-	.addr(LCB_rq_addr3),			// address to read (to ROM)
-	.tx(UART4_TX),					// serial transmitted data
-	.dirTX(UART4_dTX),				// rs485 TX dir controller 
-	.dirRX(UART4_dRX)				// rs485 RX dir controller
+//---------------------------------------------------------------------------------------------------------
+UARTTXBIG rqLCB1(.reset(reset), .clk(clk5), .RQ(LCB1_RQ_Signal), .cycle(LCB_RQ_Number + 1'b1), .data(LCB_rq_data1), .addr(LCB_rq_addr1), .tx(UART1_TX), .dirTX(UART1_dTX), .dirRX(UART1_dRX));
+defparam rqLCB1.BYTES = 5'd14;
+ROMr1 r1(.address(LCB_rq_addr1), .inclock(clk80), .outclock(clk80), .q(LCB_rq_data1));
+UARTRX rxLCB1(.clk(clk80), .reset(reset), .RX(UART1_RX), .oData(LCB_rx_wire1), .oValid(LCB_rx_val1));
+lcbFull lc1(
+	.clk(clk80), .reset(reset),
+	.rawData(LCB_rx_wire1), .rxValid(LCB_rx_val1), .LCBrqNumber(LCB_RQ_Number),
+	.wrdOut(LCB1_ODATA), .wrdAddr(LCB1_OADDR), .wren(LCB1_WREN),
+	.oldWrd(LCB1_IDATA), .oldWrdAddr(LCB1_RADR), .oldRdEn(LCB1_RDEN),
+	.overallBusy(LC1_over), .busy(LC1_busy),
+	.addrROMaddr(LCB1_ROM_addr), .dataROMaddr(LCB1_ROM_data)
 );
+// this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
+LCBaddr1 a1(.address(LCB1_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB1_ROM_data));
+
+//---------------------------------------------------------------------------------------------------------
+UARTTXBIG rqLCB2(.reset(reset), .clk(clk5), .RQ(LCB2_RQ_Signal), .cycle(LCB_RQ_Number + 1'b1), .data(LCB_rq_data2), .addr(LCB_rq_addr2), .tx(UART3_TX), .dirTX(UART3_dTX), .dirRX(UART3_dRX));
+defparam rqLCB2.BYTES = 5'd14;
+ROMr2 r2(.address(LCB_rq_addr2), .inclock(clk80), .outclock(clk80), .q(LCB_rq_data2));
+UARTRX rxLCB2(.clk(clk80), .reset(reset), .RX(UART3_RX), .oData(LCB_rx_wire2), .oValid(LCB_rx_val2));
+lcbFull lc2(
+	.clk(clk80), .reset(reset),
+	.rawData(LCB_rx_wire2), .rxValid(LCB_rx_val2), .LCBrqNumber(LCB_RQ_Number),
+	.wrdOut(LCB2_ODATA), .wrdAddr(LCB2_OADDR), .wren(LCB2_WREN),
+	.oldWrd(LCB2_IDATA), .oldWrdAddr(LCB2_RADR), .oldRdEn(LCB2_RDEN),
+	.overallBusy(LC2_over), .busy(LC2_busy),
+	.addrROMaddr(LCB2_ROM_addr), .dataROMaddr(LCB2_ROM_data)
+);
+// this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
+LCBaddr2 a2(.address(LCB2_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB2_ROM_data));
+
+//---------------------------------------------------------------------------------------------------------
+UARTTXBIG rqLCB3(.reset(reset), .clk(clk5), .RQ(LCB3_RQ_Signal), .cycle(LCB_RQ_Number + 1'b1), .data(LCB_rq_data3), .addr(LCB_rq_addr3), .tx(UART4_TX), .dirTX(UART4_dTX), .dirRX(UART4_dRX));
 defparam rqLCB3.BYTES = 5'd14;
 ROMr3 r3(.address(LCB_rq_addr3), .inclock(clk80), .outclock(clk80), .q(LCB_rq_data3));
 UARTRX rxLCB3(.clk(clk80), .reset(reset), .RX(UART4_RX), .oData(LCB_rx_wire3), .oValid(LCB_rx_val3));
-
 lcbFull lc3(
 	.clk(clk80), .reset(reset),
 	.rawData(LCB_rx_wire3), .rxValid(LCB_rx_val3), .LCBrqNumber(LCB_RQ_Number),
@@ -137,46 +159,48 @@ lcbFull lc3(
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
 LCBaddr3 a3(.address(LCB3_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB3_ROM_data));
 
+//---------------------------------------------------------------------------------------------------------
+UARTTXBIG rqLCB4(.reset(reset), .clk(clk5), .RQ(LCB4_RQ_Signal), .cycle(LCB_RQ_Number + 1'b1), .data(LCB_rq_data4), .addr(LCB_rq_addr4), .tx(UART5_TX), .dirTX(UART5_dTX), .dirRX(UART5_dRX));
+defparam rqLCB4.BYTES = 5'd14;
+ROMr4 r4(.address(LCB_rq_addr4), .inclock(clk80), .outclock(clk80), .q(LCB_rq_data4));
+UARTRX rxLCB4(.clk(clk80), .reset(reset), .RX(UART5_RX), .oData(LCB_rx_wire4), .oValid(LCB_rx_val4));
+lcbFull lc4(
+	.clk(clk80), .reset(reset),
+	.rawData(LCB_rx_wire4), .rxValid(LCB_rx_val4), .LCBrqNumber(LCB_RQ_Number),
+	.wrdOut(LCB4_ODATA), .wrdAddr(LCB4_OADDR), .wren(LCB4_WREN),
+	.oldWrd(LCB4_IDATA), .oldWrdAddr(LCB4_RADR), .oldRdEn(LCB4_RDEN),
+	.overallBusy(LC4_over), .busy(LC4_busy),
+	.addrROMaddr(LCB4_ROM_addr), .dataROMaddr(LCB4_ROM_data)
+);
+// this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
+LCBaddr4 a4(.address(LCB4_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB4_ROM_data));
+
+//---------------------------------------------------------------------------------------------------------
 Distributor modelsim_9(
 	//basic
 	.clk(clk80),
 	.reset(reset),
 	//busy signals
-	.busy_1(LC3_busy),
-//	.busy_2(LC1_BUSY),
-//	.busy_3(LC4_BUSY),
-//	.busy_4(LC2_BUSY),
+	.busy_1(LC1_busy),
+	.busy_2(LC2_busy),
+	.busy_3(LC3_busy),
+	.busy_4(LC4_busy),
 	//common inouts
 	.commWrdOut(LCB_ODATA), .commWrdAddr(LCB_OADDR), .commWren(LCB_WREN), .commOldWrd(LCB_IDATA), .commOldWrdAddr(LCB_RADR), .commOldRdEn(LCB_RDEN),
 	//LCB3 inouts
-	.wrdOut_1(LCB3_ODATA), .wrdAddr_1(LCB3_OADDR), .wren_1(LCB3_WREN), .oldWrd_1(LCB3_IDATA), .oldWrdAddr_1(LCB3_RADR), .oldRdEn_1(LCB3_RDEN),
+	.wrdOut_1(LCB1_ODATA), .wrdAddr_1(LCB1_OADDR), .wren_1(LCB1_WREN), .oldWrd_1(LCB1_IDATA), .oldWrdAddr_1(LCB1_RADR), .oldRdEn_1(LCB1_RDEN),
 	//LCB1 inouts
-//	.wrdOut_2(LCB1_ODATA),
-//	.wrdAddr_2(LCB1_OADDR),
-//	.wren_2(LCB1_WREN),
-//	.oldWrd_2(LCB1_IDATA),
-//	.oldWrdAddr_2(LCB1_RADR),
-//	.oldRdEn_2(LCB1_RDEN),
+	.wrdOut_2(LCB2_ODATA), .wrdAddr_2(LCB2_OADDR), .wren_2(LCB2_WREN), .oldWrd_2(LCB2_IDATA), .oldWrdAddr_2(LCB2_RADR), .oldRdEn_2(LCB2_RDEN),
 	//LCB4 inouts
-//	.wrdOut_3(LCB4_ODATA),
-//	.wrdAddr_3(LCB4_OADDR),
-//	.wren_3(LCB4_WREN),
-//	.oldWrd_3(LCB4_IDATA),
-//	.oldWrdAddr_3(LCB4_RADR),
-//	.oldRdEn_3(LCB4_RDEN),
+	.wrdOut_3(LCB3_ODATA), .wrdAddr_3(LCB3_OADDR), .wren_3(LCB3_WREN), .oldWrd_3(LCB3_IDATA), .oldWrdAddr_3(LCB3_RADR), .oldRdEn_3(LCB3_RDEN),
 	//LCB2 inouts
-//	.wrdOut_4(LCB2_ODATA),
-//	.wrdAddr_4(LCB2_OADDR),
-//	.wren_4(LCB2_WREN),
-//	.oldWrd_4(LCB2_IDATA),
-//	.oldWrdAddr_4(LCB2_RADR),
-//	.oldRdEn_4(LCB2_RDEN)
+	.wrdOut_4(LCB4_ODATA), .wrdAddr_4(LCB4_OADDR), .wren_4(LCB4_WREN), .oldWrd_4(LCB4_IDATA), .oldWrdAddr_4(LCB4_RADR), .oldRdEn_4(LCB4_RDEN)
 );
 
 
 assign testGreen = MEM2_WE;			//ch4
 assign testBlue = LCB_WREN;			//ch2
-assign testYellow = LCB_rx_val3;	//ch1
+assign testYellow = LC3_over;	//ch1
 assign testRed = MEM2_RE;			//ch3
 
 
