@@ -83,23 +83,23 @@ always@(posedge clk or negedge reset) begin
 							state <= 5'd1;						// go handle the measure (check whether it's analog or contact)
 							busy <= 1;							// master signal, when got a byte here - write it to memory
 						end
-						2,7,12:begin
+						2,7,12:begin							// do the same thing nine more times
 							measure2[7:0] = rawData[7:0];
 							wrdOut <= {1'b0, measure2, 1'b0}; 
 							state <= 5'd1;
-							busy <= 1;							// master signal, when got a byte here - write it to memory
+							busy <= 1;							
 						end
 						3,8,13:begin
 							measure3[7:0] = rawData[7:0];
 							wrdOut <= {1'b0, measure3, 1'b0}; 
 							state <= 5'd1;
-							busy <= 1;							// master signal, when got a byte here - write it to memory
+							busy <= 1;							
 						end
 						4,9,14:begin
 							measure4[7:0] = rawData[7:0];
 							wrdOut <= {1'b0, measure4, 1'b0}; 
 							state <= 5'd1;
-							busy <= 1;							// master signal, when got a byte here - write it to memory
+							busy <= 1;							
 						end
 					endcase
 					measure_contact <= rawData[0];

@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Fri Nov 18 09:51:29 2016
+File Generation Date & Time: Fri Nov 18 10:37:06 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -79,12 +79,12 @@ UART3_dTX                    : 34        : output : LVTTL/LVCMOS      :         
 UART3_dRX                    : 35        : output : LVTTL/LVCMOS      :         :           : Y              
 UART3_RX                     : 36        : input  : LVTTL/LVCMOS      :         :           : Y              
 VCC_IO                       : 37        : power  :                   : 3.3V    :           :                
-GND*                         : 38        :        :                   :         :           :                
-GND*                         : 39        :        :                   :         :           :                
+UART2_TX                     : 38        : output : LVTTL/LVCMOS      :         :           : Y              
+UART2_dTX                    : 39        : output : LVTTL/LVCMOS      :         :           : Y              
 VCC_INT                      : 40        : power  :                   : 2.5V    :           :                
-GND*                         : 41        :        :                   :         :           :                
+UART2_dRX                    : 41        : output : LVTTL/LVCMOS      :         :           : Y              
 GND_INT                      : 42        : gnd    :                   :         :           :                
-GND*                         : 43        :        :                   :         :           :                
+UART2_RX                     : 43        : input  : LVTTL/LVCMOS      :         :           : Y              
 GND*                         : 44        :        :                   :         :           :                
 GND*                         : 45        :        :                   :         :           :                
 GND*                         : 46        :        :                   :         :           :                
@@ -104,7 +104,7 @@ TRST                         : 59        : input  :                   :         
 nSTATUS                      : 60        : bidir  :                   :         :           :                
 GND*                         : 61        :        :                   :         :           :                
 GND*                         : 62        :        :                   :         :           :                
-GND*                         : 63        :        :                   :         :           :                
+UART6_dRX                    : 63        : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 64        :        :                   :         :           :                
 GND*                         : 65        :        :                   :         :           :                
 GND*                         : 66        :        :                   :         :           :                
@@ -150,7 +150,7 @@ GND*                         : 105       :        :                   :         
 GND*                         : 106       :        :                   :         :           :                
 GND*                         : 107       :        :                   :         :           :                
 GND*                         : 108       :        :                   :         :           :                
-Orb_wordValid                : 109       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 109       :        :                   :         :           :                
 GND*                         : 110       :        :                   :         :           :                
 GND*                         : 111       :        :                   :         :           :                
 VCC_IO                       : 112       : power  :                   : 3.3V    :           :                
@@ -173,7 +173,7 @@ GND*                         : 128       :        :                   :         
 GND*                         : 129       :        :                   :         :           :                
 VCC_INT                      : 130       : power  :                   : 2.5V    :           :                
 GND*                         : 131       :        :                   :         :           :                
-GND*                         : 132       :        :                   :         :           :                
+Orb_wordValid                : 132       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 133       :        :                   :         :           :                
 GND*                         : 134       :        :                   :         :           :                
 GND_INT                      : 135       : gnd    :                   :         :           :                
@@ -226,7 +226,7 @@ GND*                         : 181       :        :                   :         
 GND*                         : 182       :        :                   :         :           :                
 GND*                         : 183       :        :                   :         :           :                
 testYellow                   : 184       : output : LVTTL/LVCMOS      :         :           : Y              
-GND*                         : 185       :        :                   :         :           :                
+UART6_dTX                    : 185       : output : LVTTL/LVCMOS      :         :           : N              
 testRed                      : 186       : output : LVTTL/LVCMOS      :         :           : Y              
 VCC_INT                      : 187       : power  :                   : 2.5V    :           :                
 GND*                         : 188       :        :                   :         :           :                
@@ -251,7 +251,7 @@ GND*                         : 206       :        :                   :         
 GND*                         : 207       :        :                   :         :           :                
 GND*                         : 208       :        :                   :         :           :                
 GND*                         : 209       :        :                   :         :           :                
-GND+                         : 210       :        :                   :         :           :                
+UART6_RX                     : 210       : input  : LVTTL/LVCMOS      :         :           : N              
 clk80                        : 211       : input  : LVTTL/LVCMOS      :         :           : Y              
 GND+                         : 212       :        :                   :         :           :                
 GND*                         : 213       :        :                   :         :           :                
@@ -261,7 +261,7 @@ GND_INT                      : 216       : gnd    :                   :         
 GND*                         : 217       :        :                   :         :           :                
 GND*                         : 218       :        :                   :         :           :                
 GND*                         : 219       :        :                   :         :           :                
-GND*                         : 220       :        :                   :         :           :                
+UART6_TX                     : 220       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 221       :        :                   :         :           :                
 GND*                         : 222       :        :                   :         :           :                
 GND*                         : 223       :        :                   :         :           :                

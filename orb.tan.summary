@@ -5,7 +5,7 @@ Timing Analyzer Summary
 Type           : Worst-case tsu
 Slack          : N/A
 Required Time  : None
-Actual Time    : 8.800 ns
+Actual Time    : 6.800 ns
 From           : UART4_RX
 To             : UARTRX:rxLCB3|sync[0]
 From Clock     : --
@@ -15,9 +15,9 @@ Failed Paths   : 0
 Type           : Worst-case tco
 Slack          : N/A
 Required Time  : None
-Actual Time    : 22.900 ns
-From           : M8:frameFormer|oRdEn
-To             : testRed
+Actual Time    : 28.000 ns
+From           : M8:frameFormer|oValid
+To             : Orb_wordValid
 From Clock     : clk100
 To Clock       : --
 Failed Paths   : 0
@@ -25,7 +25,7 @@ Failed Paths   : 0
 Type           : Worst-case th
 Slack          : N/A
 Required Time  : None
-Actual Time    : -6.600 ns
+Actual Time    : -4.600 ns
 From           : UART4_RX
 To             : UARTRX:rxLCB3|sync[0]
 From Clock     : --
@@ -45,9 +45,9 @@ Failed Paths   : 0
 Type           : Clock Setup: 'clk100'
 Slack          : N/A
 Required Time  : None
-Actual Time    : 51.55 MHz ( period = 19.400 ns )
-From           : M8:frameFormer|lpm_counter:cntGrp_rtl_4|alt_counter_f10ke:wysi_counter|counter_cell[1]
-To             : M8:frameFormer|outWrd[22]
+Actual Time    : 42.37 MHz ( period = 23.600 ns )
+From           : M8:frameFormer|cntBit[2]
+To             : M8:frameFormer|outWrd[23]
 From Clock     : clk100
 To Clock       : clk100
 Failed Paths   : 0

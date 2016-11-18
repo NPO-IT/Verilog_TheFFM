@@ -1,15 +1,20 @@
 module TheFFM (
 	input clk80, clk100,								// generators 80MHz and 100'663'296Hz
-	// LCB
-	input UART1_RX, UART3_RX, UART4_RX,			// rs-485 rx
-	output UART1_dRX, UART3_dRX, UART4_dRX,		// rs-485 dirRX
-	output UART1_dTX, UART3_dTX, UART4_dTX,		// rs-485 dirTX
-	output UART1_TX, UART3_TX, UART4_TX,		// rs-485 tx
-	// other UARTs
-	input UART5_RX,
-	output UART5_dRX,
-	output UART5_dTX,
-	output UART5_TX,
+	// LCB 1-4
+	input UART1_RX, UART3_RX, UART4_RX, UART5_RX,		// rs-485 rx
+	output UART1_dRX, UART3_dRX, UART4_dRX,	UART5_dRX,	// rs-485 dirRX
+	output UART1_dTX, UART3_dTX, UART4_dTX,	UART5_dTX,	// rs-485 dirTX
+	output UART1_TX, UART3_TX, UART4_TX, UART5_TX,		// rs-485 tx
+	// something wrong with device on uart 2
+	input UART2_RX,
+	output UART2_dRX,
+	output UART2_dTX,
+	output UART2_TX,
+	// MCM UARTs
+	input UART6_RX,
+	output UART6_dRX,
+	output UART6_dTX,
+	output UART6_TX,
 	// 
 	output Orb_serial,
 	output Orb_wordValid,
@@ -23,7 +28,6 @@ module TheFFM (
 
 globalReset aClear(.clk(clk80), .rst(reset));	// global uber aclr imitation
 defparam aClear.delayInSec = 1;
-
 divReg clk80Divider(.reset(reset), .iClkIN(clk80), .Outdiv16(clk5)); 	// clk generator 80MHz (5MHz for UART transmissions)
 divReg clk100Divider(.reset(reset), .iClkIN(clk100), .Outdiv8(clk12)); 	// clk generator 100'663'296Hz (~12,5MHz for M8-former. "Orbita Frame")
 
@@ -39,57 +43,29 @@ wire FF_RDEN, FF_SWCH, LCB_WREN, LCB_RDEN;
 reg MEM1_RE, MEM2_RE, FF_M2_RE, FF_M1_RE, LCB_M1_RE, LCB_M2_RE;
 reg MEM1_WE, MEM2_WE;
 
-/* old connectivity, analog parameters only
-always@(*)begin
-	case(FF_SWCH)
-		0: begin
-			FF_DATA = MEM1_DATA;
-			MEM1_RE = FF_RDEN;
-			MEM2_RE = 0;
-			MEM1_WE = 0;
-			MEM2_WE = LCB_WREN;
-		end
-		1: begin
-			FF_DATA = MEM2_DATA;
-			MEM1_RE = 0;
-			MEM2_RE = FF_RDEN;
-			MEM1_WE = LCB_WREN;
-			MEM2_WE = 0;
-		end
-	endcase
-end
-*/
 always@(*)begin
 	case(FF_SWCH)
 		0: begin
 			FF_DATA = MEM1_DATA;		//mem-to-m8 mux
 			LCB_IDATA = MEM2_DATA;		//mem-to-blk mux + n0 not
-			
 			MEM1_WE = 0;				//m1w and2
 			MEM2_WE = LCB_WREN;			//m2w and2 + n1 not
-			
 			MEM1_RADR = FF_RADR;		//mem1-radr mux + n2 not
 			MEM2_RADR = LCB_RADR;		//mem2-radr mux
-			
 			FF_M1_RE = FF_RDEN;			//fr1 and2 + n4 not
 			FF_M2_RE = 0;				//fr2 and2
-			
 			LCB_M1_RE = 0;				//lr1 and2
 			LCB_M2_RE = LCB_RDEN;		//lr2 and2 + n3 not
 		end
 		1: begin
 			FF_DATA = MEM2_DATA;		//mem-to-m8 mux
 			LCB_IDATA = MEM1_DATA;		//mem-to-blk mux + n0 not
-			
 			MEM2_WE = 0;				//m2w and2 + n1 not
 			MEM1_WE = LCB_WREN;			//m1w and2
-			
 			MEM2_RADR = FF_RADR;		//mem2-radr mux
 			MEM1_RADR = LCB_RADR;		//mem1-radr mux + n2 not
-			
 			FF_M2_RE = FF_RDEN;			//fr2 and2
 			FF_M1_RE = 0;				//fr1 and2 + n4 not
-
 			LCB_M2_RE = 0;				//lr2 and2 + n3 not
 			LCB_M1_RE = LCB_RDEN;		//lr1 and2
 		end
@@ -120,6 +96,13 @@ M8 frameFormer( .reset(reset), .clk(clk12),	// 12'582'912
 // request uart block
 wire [7:0]LCB_rq_data3;
 wire [8:0]LCB_rq_addr3;
+wire [7:0]LCB_rx_wire3;
+wire LCB_rx_val3;
+wire [8:0]LCB_ROM_addr;
+wire [14:0]LCB_ROM_data;
+wire combinetest;
+wire LC3_busy;
+
 UARTTXBIG rqLCB3(
 	.reset(reset),					// global reset and enable signal
 	.clk(clk5),						// actual needed baudrate
@@ -132,55 +115,20 @@ UARTTXBIG rqLCB3(
 	.dirRX(UART4_dRX)				// rs485 RX dir controller
 );
 defparam rqLCB3.BYTES = 5'd14;
-ROMr3( 
-	.address(LCB_rq_addr3),
-	.inclock(clk80),
-	.outclock(clk80),
-	.q(LCB_rq_data3)
-);
-
-
-wire [7:0]LCB_rx_wire3;
-wire LCB_rx_val3;
-wire [8:0]LCB_ROM_addr;
-wire [14:0]LCB_ROM_data;
-wire combinetest;
-
-UARTRX rxLCB3(
-	.clk(clk80), 			
-	.reset(reset),
-	.RX(UART4_RX),				// serial wire
-	.oData(LCB_rx_wire3),		// parallel data
-	.oValid(LCB_rx_val3)		// data is valid while this signal is 1
-);
+ROMr3(.address(LCB_rq_addr3), .inclock(clk80), .outclock(clk80), .q(LCB_rq_data3));
+UARTRX rxLCB3(.clk(clk80), .reset(reset), .RX(UART4_RX), .oData(LCB_rx_wire3), .oValid(LCB_rx_val3));
 
 lcbFull(
-	.clk(clk80),
-	.reset(reset),
-	.rawData(LCB_rx_wire3),
-	.rxValid(LCB_rx_val3),
-	.LCBrqNumber(LCB_RQ_Number),
-	.wrdOut(LCB_ODATA),
-	.wrdAddr(LCB_OADDR),
-	.wren(LCB_WREN),
-
-	.addrROMaddr(LCB_ROM_addr),
-	.dataROMaddr(LCB_ROM_data),
-	
-	.oldWrd(LCB_IDATA),
-	.oldWrdAddr(LCB_RADR),
-	.oldRdEn(LCB_RDEN),
-	
-	.overallBusy(combinetest)
+	.clk(clk80), .reset(reset),
+	.rawData(LCB_rx_wire3), .rxValid(LCB_rx_val3), .LCBrqNumber(LCB_RQ_Number),
+	.wrdOut(LCB_ODATA), .wrdAddr(LCB_OADDR), .wren(LCB_WREN),
+	.oldWrd(LCB_IDATA), .oldWrdAddr(LCB_RADR), .oldRdEn(LCB_RDEN),
+	.overallBusy(combinetest), .busy(LC3_busy),
+	.addrROMaddr(LCB_ROM_addr), .dataROMaddr(LCB_ROM_data)
 );
-
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word
-LCBaddr3(
-	.address(LCB_ROM_addr),
-	.inclock(clk80),
-	.outclock(clk80),
-	.q(LCB_ROM_data)
-);
+LCBaddr3(.address(LCB_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB_ROM_data));
+
 assign testGreen = MEM2_WE;			//ch4
 assign testBlue = LCB_WREN;			//ch2
 assign testYellow = LCB_rx_val3;	//ch1
