@@ -153,21 +153,6 @@ UARTRX rxLCB3(
 	.oData(LCB_rx_wire3),		// parallel data
 	.oValid(LCB_rx_val3)		// data is valid while this signal is 1
 );
-/* old module, analog parameters only
-lcbCombiner lcb3(
-	.clk(clk80), 
-	.reset(reset),
-	.rawData(LCB_rx_wire3),			// 8bit data
-	.rxValid(LCB_rx_val3),			// data is valid while this signal is 1
-	.LCBrqNumber(LCB_RQ_Number),	// number of request that we are on (to form a request to ROM, that contains orbit addresses)
-	.addrROMaddr(LCB_ROM_addr),		// address to read from ROM, that contains orbit addresses
-	.dataROMaddr(LCB_ROM_data),		// answer from ROM, that contains orbit addresses
-	.wrdOut(LCB_DATA),				// orbit word, to write to Group memory array
-	.wrdAddr(LCB_ADDR),				// address to write to Group memory array
-	.wren(LCB_WREN),				// signal to write to Group memory array
-	.test(combinetest)
-);
-*/
 
 lcbFull(
 	.clk(clk80),
@@ -186,7 +171,7 @@ lcbFull(
 	.oldWrdAddr(LCB_RADR),
 	.oldRdEn(LCB_RDEN),
 	
-	.test(combinetest)
+	.overallBusy(combinetest)
 );
 
 // this memory knows, where to put received from UART data: 14 a/c, 13..3 orbAddr, 3..0 if (~14) place in orbit Word

@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Fri Nov 18 09:26:31 2016
+File Generation Date & Time: Fri Nov 18 09:51:29 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -113,7 +113,7 @@ GND*                         : 68        :        :                   :         
 GND_INT                      : 69        : gnd    :                   :         :           :                
 GND*                         : 70        :        :                   :         :           :                
 GND*                         : 71        :        :                   :         :           :                
-Orb_wordValid                : 72        : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 72        :        :                   :         :           :                
 GND*                         : 73        :        :                   :         :           :                
 GND*                         : 74        :        :                   :         :           :                
 GND*                         : 75        :        :                   :         :           :                
@@ -150,7 +150,7 @@ GND*                         : 105       :        :                   :         
 GND*                         : 106       :        :                   :         :           :                
 GND*                         : 107       :        :                   :         :           :                
 GND*                         : 108       :        :                   :         :           :                
-GND*                         : 109       :        :                   :         :           :                
+Orb_wordValid                : 109       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 110       :        :                   :         :           :                
 GND*                         : 111       :        :                   :         :           :                
 VCC_IO                       : 112       : power  :                   : 3.3V    :           :                
