@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Fri Nov 18 13:04:25 2016
+File Generation Date & Time: Fri Nov 18 15:35:01 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -58,11 +58,11 @@ GND*                         : 13        :        :                   :         
 GND*                         : 14        :        :                   :         :           :                
 GND*                         : 15        :        :                   :         :           :                
 VCC_IO                       : 16        : power  :                   : 3.3V    :           :                
-GND*                         : 17        :        :                   :         :           :                
-GND*                         : 18        :        :                   :         :           :                
-GND*                         : 19        :        :                   :         :           :                
+UART6_TX                     : 17        : output : LVTTL/LVCMOS      :         :           : Y              
+UART6_dTX                    : 18        : output : LVTTL/LVCMOS      :         :           : Y              
+UART6_dRX                    : 19        : output : LVTTL/LVCMOS      :         :           : Y              
 VCC_INT                      : 20        : power  :                   : 2.5V    :           :                
-GND*                         : 21        :        :                   :         :           :                
+UART6_RX                     : 21        : input  : LVTTL/LVCMOS      :         :           : Y              
 GND_INT                      : 22        : gnd    :                   :         :           :                
 UART5_TX                     : 23        : output : LVTTL/LVCMOS      :         :           : Y              
 UART5_dTX                    : 24        : output : LVTTL/LVCMOS      :         :           : Y              
@@ -147,16 +147,16 @@ GND*                         : 102       :        :                   :         
 GND*                         : 103       :        :                   :         :           :                
 GND_INT                      : 104       : gnd    :                   :         :           :                
 GND*                         : 105       :        :                   :         :           :                
-UART6_TX                     : 106       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 106       :        :                   :         :           :                
 GND*                         : 107       :        :                   :         :           :                
-UART6_dRX                    : 108       : output : LVTTL/LVCMOS      :         :           : N              
+Orb_wordValid                : 108       : output : LVTTL/LVCMOS      :         :           : N              
 GND*                         : 109       :        :                   :         :           :                
 GND*                         : 110       :        :                   :         :           :                
 GND*                         : 111       :        :                   :         :           :                
 VCC_IO                       : 112       : power  :                   : 3.3V    :           :                
 GND*                         : 113       :        :                   :         :           :                
 GND*                         : 114       :        :                   :         :           :                
-Orb_wordValid                : 115       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 115       :        :                   :         :           :                
 GND*                         : 116       :        :                   :         :           :                
 GND*                         : 117       :        :                   :         :           :                
 GND*                         : 118       :        :                   :         :           :                
@@ -244,14 +244,14 @@ GND*                         : 199       :        :                   :         
 GND*                         : 200       :        :                   :         :           :                
 GND*                         : 201       :        :                   :         :           :                
 GND*                         : 202       :        :                   :         :           :                
-UART6_dTX                    : 203       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 203       :        :                   :         :           :                
 GND*                         : 204       :        :                   :         :           :                
 VCC_IO                       : 205       : power  :                   : 3.3V    :           :                
 GND*                         : 206       :        :                   :         :           :                
 GND*                         : 207       :        :                   :         :           :                
 GND*                         : 208       :        :                   :         :           :                
 GND*                         : 209       :        :                   :         :           :                
-UART6_RX                     : 210       : input  : LVTTL/LVCMOS      :         :           : N              
+GND+                         : 210       :        :                   :         :           :                
 clk80                        : 211       : input  : LVTTL/LVCMOS      :         :           : Y              
 GND+                         : 212       :        :                   :         :           :                
 GND*                         : 213       :        :                   :         :           :                

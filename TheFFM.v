@@ -26,23 +26,55 @@ module TheFFM (
 	output testRed
 );
 
+//-------------------------------------------------------------------------------------------------------
+// FFM connections
+wire			clk12, clk5;
+wire			reset;
+
+//-------------------------------------------------------------------------------------------------------
+// Orbit group buffers
+wire	[9:0]	FF_RADR, LCB_RADR, LCB_OADDR; 
+reg		[9:0]	MEM2_RADR, MEM1_RADR;
+wire	[11:0]	MEM1_DATA, MEM2_DATA, LCB_ODATA; 
+reg		[11:0]	FF_DATA, LCB_IDATA;
+wire			FF_RDEN, FF_SWCH, LCB_WREN, LCB_RDEN;
+reg				MEM1_RE, MEM2_RE, FF_M2_RE, FF_M1_RE, LCB_M1_RE, LCB_M2_RE;
+reg				MEM1_WE, MEM2_WE;
+
+//---------------------------------------------------------------------------------------------------------
+// LCB connections
+wire	[4:0]	LCB_RQ_Number;
+wire 			LCB1_RQ_Signal, LCB2_RQ_Signal, LCB3_RQ_Signal, LCB4_RQ_Signal;
+// inner
+wire	[7:0]	LCB_rq_data3, LCB_rq_data1, LCB_rq_data2, LCB_rq_data4;
+wire	[8:0]	LCB_rq_addr3, LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr4;
+wire	[7:0]	LCB_rx_wire3, LCB_rx_wire1, LCB_rx_wire2, LCB_rx_wire4;
+wire 			LCB_rx_val3, LCB_rx_val1, LCB_rx_val2, LCB_rx_val4;
+wire	[8:0]	LCB3_ROM_addr, LCB1_ROM_addr, LCB2_ROM_addr, LCB4_ROM_addr;
+wire	[14:0]	LCB3_ROM_data, LCB1_ROM_data, LCB2_ROM_data, LCB4_ROM_data;
+// outer
+wire	[11:0]	LCB3_ODATA, LCB1_ODATA, LCB2_ODATA, LCB4_ODATA;
+wire	[9:0]	LCB3_OADDR, LCB1_OADDR, LCB2_OADDR, LCB4_OADDR;
+wire			LCB3_WREN, LCB1_WREN, LCB2_WREN, LCB4_WREN;
+wire	[11:0]	LCB3_IDATA, LCB1_IDATA, LCB2_IDATA, LCB4_IDATA;
+wire	[9:0]	LCB3_RADR, LCB1_RADR, LCB2_RADR, LCB4_RADR;
+wire			LCB3_RDEN, LCB1_RDEN, LCB2_RDEN, LCB4_RDEN;
+wire			LC3_busy, LC1_busy, LC2_busy, LC4_busy;
+wire			LC3_over, LC1_over, LC2_over, LC4_over;
+
+//---------------------------------------------------------------------------------------------------------
+// LCB connections
+wire 			MCM_RQ_Signal;
+
+//---------------------------------------------------------------------------------------------------------
+// common
 globalReset aClear(.clk(clk80), .rst(reset));	// global uber aclr imitation
 defparam aClear.delayInSec = 1;
 divReg clk80Divider(.reset(reset), .iClkIN(clk80), .Outdiv16(clk5)); 	// clk generator 80MHz (5MHz for UART transmissions)
 divReg clk100Divider(.reset(reset), .iClkIN(clk100), .Outdiv8(clk12)); 	// clk generator 100'663'296Hz (~12,5MHz for M8-former. "Orbita Frame")
 
-//-------------------------------------------------------------------------------------------------------
-wire clk12, clk5;
-wire reset/* = 0*/;
-wire [4:0]LCB_RQ_Number;
-wire [9:0]FF_RADR, LCB_RADR, LCB_OADDR; 
-reg [9:0]MEM2_RADR, MEM1_RADR;
-wire [11:0]MEM1_DATA, MEM2_DATA, LCB_ODATA; 
-reg [11:0]FF_DATA, LCB_IDATA;
-wire FF_RDEN, FF_SWCH, LCB_WREN, LCB_RDEN;
-reg MEM1_RE, MEM2_RE, FF_M2_RE, FF_M1_RE, LCB_M1_RE, LCB_M2_RE;
-reg MEM1_WE, MEM2_WE;
-
+//---------------------------------------------------------------------------------------------------------
+// distributor-buffer-former connectivity
 always@(*)begin
 	case(FF_SWCH)
 		0: begin
@@ -74,6 +106,8 @@ always@(*)begin
 	MEM2_RE = FF_M2_RE | LCB_M2_RE;		//m2r or2
 end
 
+//---------------------------------------------------------------------------------------------------------
+// group buffers and former
 memGrp groupBuf0(.clock(clk80), .data(LCB_ODATA), .rdaddress(MEM1_RADR), .rden(MEM1_RE), .wraddress(LCB_OADDR), .wren(MEM1_WE), .q(MEM1_DATA));
 memGrp groupBuf1(.clock(clk80), .data(LCB_ODATA), .rdaddress(MEM2_RADR), .rden(MEM2_RE), .wraddress(LCB_OADDR), .wren(MEM2_WE), .q(MEM2_DATA));
 M8 frameFormer( .reset(reset), .clk(clk12),	// 12'582'912
@@ -88,30 +122,12 @@ M8 frameFormer( .reset(reset), .clk(clk12),	// 12'582'912
 	.oLCB2_rq(LCB2_RQ_Signal),				// request signal for UARTTX
 	.oLCB3_rq(LCB3_RQ_Signal),				// request signal for UARTTX
 	.oLCB4_rq(LCB4_RQ_Signal),				// request signal for UARTTX
-	.oLCB_num(LCB_RQ_Number)				// [4:0]NumRQ
+	.oLCB_num(LCB_RQ_Number),				// [4:0]NumRQ
+	.oMCM_rq(MCM_RQ_Signal),
 );
 
 //---------------------------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------------------------
-// LCB3
-// inner connections
-wire [7:0]LCB_rq_data3, LCB_rq_data1, LCB_rq_data2, LCB_rq_data4;
-wire [8:0]LCB_rq_addr3, LCB_rq_addr1, LCB_rq_addr2, LCB_rq_addr4;
-wire [7:0]LCB_rx_wire3, LCB_rx_wire1, LCB_rx_wire2, LCB_rx_wire4;
-wire LCB_rx_val3, LCB_rx_val1, LCB_rx_val2, LCB_rx_val4;
-wire [8:0]LCB3_ROM_addr, LCB1_ROM_addr, LCB2_ROM_addr, LCB4_ROM_addr;
-wire [14:0]LCB3_ROM_data, LCB1_ROM_data, LCB2_ROM_data, LCB4_ROM_data;
-// outer
-wire [11:0]LCB3_ODATA, LCB1_ODATA, LCB2_ODATA, LCB4_ODATA;
-wire [9:0]LCB3_OADDR, LCB1_OADDR, LCB2_OADDR, LCB4_OADDR;
-wire LCB3_WREN, LCB1_WREN, LCB2_WREN, LCB4_WREN;
-wire [11:0]LCB3_IDATA, LCB1_IDATA, LCB2_IDATA, LCB4_IDATA;
-wire [9:0]LCB3_RADR, LCB1_RADR, LCB2_RADR, LCB4_RADR;
-wire LCB3_RDEN, LCB1_RDEN, LCB2_RDEN, LCB4_RDEN;
-wire LC3_busy, LC1_busy, LC2_busy, LC4_busy;
-wire LC3_over, LC1_over, LC2_over, LC4_over;
-
-//---------------------------------------------------------------------------------------------------------
+// LOCAL COMMUTATION BLOCKS
 UARTTXBIG rqLCB1(.reset(reset), .clk(clk5), .RQ(LCB1_RQ_Signal), .cycle(LCB_RQ_Number + 1'b1), .data(LCB_rq_data1), .addr(LCB_rq_addr1), .tx(UART1_TX), .dirTX(UART1_dTX), .dirRX(UART1_dRX));
 defparam rqLCB1.BYTES = 5'd14;
 ROMr1 r1(.address(LCB_rq_addr1), .inclock(clk80), .outclock(clk80), .q(LCB_rq_data1));
@@ -176,6 +192,19 @@ lcbFull lc4(
 LCBaddr4 a4(.address(LCB4_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB4_ROM_data));
 
 //---------------------------------------------------------------------------------------------------------
+// on-board calculating Machine Coordination Module
+wire 			MCM_rx_valid;
+wire	[7:0]	MCM_rx_data;
+wire	[7:0]	MCM_rq_data;
+wire	[3:0]	MCM_rq_addr;
+
+UARTTXBIG rqMCM(.reset(reset), .clk(clk5), .RQ(MCM_RQ_Signal), .cycle(0), .data(MCM_rq_data), .addr(MCM_rq_addr), .tx(UART6_TX), .dirTX(UART6_dTX), .dirRX(UART6_dRX));
+defparam rqMCM.BYTES = 5'd8;
+ROMmcm mcm(.address(MCM_rq_addr), .inclock(clk80), .outclock(clk80), .q(MCM_rq_data));
+UARTRX rxMCM(.clk(clk80), .reset(reset), .RX(UART6_RX), .oData(MCM_rx_data), .oValid(MCM_rx_valid));
+
+
+//---------------------------------------------------------------------------------------------------------
 Distributor modelsim_9(
 	//basic
 	.clk(clk80),
@@ -187,13 +216,10 @@ Distributor modelsim_9(
 	.busy_4(LC4_busy),
 	//common inouts
 	.commWrdOut(LCB_ODATA), .commWrdAddr(LCB_OADDR), .commWren(LCB_WREN), .commOldWrd(LCB_IDATA), .commOldWrdAddr(LCB_RADR), .commOldRdEn(LCB_RDEN),
-	//LCB3 inouts
+	//LCB 1-4 inouts
 	.wrdOut_1(LCB1_ODATA), .wrdAddr_1(LCB1_OADDR), .wren_1(LCB1_WREN), .oldWrd_1(LCB1_IDATA), .oldWrdAddr_1(LCB1_RADR), .oldRdEn_1(LCB1_RDEN),
-	//LCB1 inouts
 	.wrdOut_2(LCB2_ODATA), .wrdAddr_2(LCB2_OADDR), .wren_2(LCB2_WREN), .oldWrd_2(LCB2_IDATA), .oldWrdAddr_2(LCB2_RADR), .oldRdEn_2(LCB2_RDEN),
-	//LCB4 inouts
 	.wrdOut_3(LCB3_ODATA), .wrdAddr_3(LCB3_OADDR), .wren_3(LCB3_WREN), .oldWrd_3(LCB3_IDATA), .oldWrdAddr_3(LCB3_RADR), .oldRdEn_3(LCB3_RDEN),
-	//LCB2 inouts
 	.wrdOut_4(LCB4_ODATA), .wrdAddr_4(LCB4_OADDR), .wren_4(LCB4_WREN), .oldWrd_4(LCB4_IDATA), .oldWrdAddr_4(LCB4_RADR), .oldRdEn_4(LCB4_RDEN)
 );
 

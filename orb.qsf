@@ -120,3 +120,11 @@ set_global_assignment -name VERILOG_FILE Distributor.v
 set_global_assignment -name QIP_FILE LCBaddr1.qip
 set_global_assignment -name QIP_FILE LCBaddr4.qip
 set_global_assignment -name QIP_FILE LCBaddr2.qip
+set_global_assignment -name VERILOG_FILE MCM_coord.v
+set_global_assignment -name VERILOG_FILE MCM_pack.v
+set_global_assignment -name HEX_FILE eROMm.hex
+set_global_assignment -name QIP_FILE ROMmcm.qip
+set_location_assignment PIN_21 -to UART6_RX
+set_location_assignment PIN_17 -to UART6_TX
+set_location_assignment PIN_19 -to UART6_dRX
+set_location_assignment PIN_18 -to UART6_dTX
