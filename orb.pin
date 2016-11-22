@@ -36,7 +36,7 @@
  ------------------------------------------------------------------------------
 
 
-File Generation Date & Time: Fri Nov 18 15:35:01 2016
+File Generation Date & Time: Tue Nov 22 15:55:32 2016
 Quartus II Version 9.0 Build 184 04/29/2009 Service Pack 1 SJ Web Edition
 CHIP  "orb"  ASSIGNED TO AN: EPF10K200SRC240-3
 
@@ -50,12 +50,12 @@ VCC_INT                      : 5         : power  :                   : 2.5V    
 GND*                         : 6         :        :                   :         :           :                
 rt7                          : 7         : input  : LVTTL/LVCMOS      :         :           : Y              
 rt8                          : 8         : input  : LVTTL/LVCMOS      :         :           : Y              
-GND*                         : 9         :        :                   :         :           :                
+UART7_TX                     : 9         : output : LVTTL/LVCMOS      :         :           : Y              
 GND_INT                      : 10        : gnd    :                   :         :           :                
-GND*                         : 11        :        :                   :         :           :                
+UART7_dTX                    : 11        : output : LVTTL/LVCMOS      :         :           : Y              
 GND*                         : 12        :        :                   :         :           :                
-GND*                         : 13        :        :                   :         :           :                
-GND*                         : 14        :        :                   :         :           :                
+UART7_dRX                    : 13        : output : LVTTL/LVCMOS      :         :           : Y              
+UART7_RX                     : 14        : input  : LVTTL/LVCMOS      :         :           : Y              
 GND*                         : 15        :        :                   :         :           :                
 VCC_IO                       : 16        : power  :                   : 3.3V    :           :                
 UART6_TX                     : 17        : output : LVTTL/LVCMOS      :         :           : Y              
@@ -149,7 +149,7 @@ GND_INT                      : 104       : gnd    :                   :         
 GND*                         : 105       :        :                   :         :           :                
 GND*                         : 106       :        :                   :         :           :                
 GND*                         : 107       :        :                   :         :           :                
-Orb_wordValid                : 108       : output : LVTTL/LVCMOS      :         :           : N              
+GND*                         : 108       :        :                   :         :           :                
 GND*                         : 109       :        :                   :         :           :                
 GND*                         : 110       :        :                   :         :           :                
 GND*                         : 111       :        :                   :         :           :                
@@ -195,7 +195,7 @@ VCC_INT                      : 150       : power  :                   : 2.5V    
 GND*                         : 151       :        :                   :         :           :                
 GND*                         : 152       :        :                   :         :           :                
 GND*                         : 153       :        :                   :         :           :                
-GND*                         : 154       :        :                   :         :           :                
+Orb_wordValid                : 154       : output : LVTTL/LVCMOS      :         :           : N              
 GND_INT                      : 155       : gnd    :                   :         :           :                
 GND*                         : 156       :        :                   :         :           :                
 GND*                         : 157       :        :                   :         :           :                

@@ -11,10 +11,10 @@ module TheFFM (
 	output UART2_dTX,
 	output UART2_TX,
 	// MCM UARTs
-	input UART6_RX,
-	output UART6_dRX,
-	output UART6_dTX,
-	output UART6_TX,
+	input UART6_RX, UART7_RX,
+	output UART6_dRX, UART7_dRX,
+	output UART6_dTX, UART7_dTX,
+	output UART6_TX, UART7_TX,
 	// 
 	output Orb_serial,
 	output Orb_wordValid,
@@ -193,16 +193,49 @@ LCBaddr4 a4(.address(LCB4_ROM_addr), .inclock(clk80), .outclock(clk80), .q(LCB4_
 
 //---------------------------------------------------------------------------------------------------------
 // on-board calculating Machine Coordination Module
-wire 			MCM_rx_valid;
-wire	[7:0]	MCM_rx_data;
+wire			LCB_busy;
+wire			MCM_busy;
 wire	[7:0]	MCM_rq_data;
 wire	[3:0]	MCM_rq_addr;
+wire 			MCM_rx_valid;
+wire	[7:0]	MCM_rx_data;
+wire	[7:0]	MCM_rx_addr;
+wire			MCM_rx_done;
+wire	[7:0]	MCM_dat;
+wire	[11:0]	MCM_ODATA;
+wire	[9:0]	MCM_OADDR;
+wire			MCM_WREN;
 
-UARTTXBIG rqMCM(.reset(reset), .clk(clk5), .RQ(MCM_RQ_Signal), .cycle(0), .data(MCM_rq_data), .addr(MCM_rq_addr), .tx(UART6_TX), .dirTX(UART6_dTX), .dirRX(UART6_dRX));
+assign LCB_busy = LC1_over | LC2_over | LC3_over | LC4_over;
+
+UARTTXBIG rqMCM(.reset(reset), .clk(clk5), .RQ(MCM_RQ_Signal), .cycle(0), .data(MCM_rq_data), .addr(MCM_rq_addr), .tx(UART7_TX), .dirTX(UART7_dTX), .dirRX(UART7_dRX));
 defparam rqMCM.BYTES = 5'd8;
 ROMmcm mcm(.address(MCM_rq_addr), .inclock(clk80), .outclock(clk80), .q(MCM_rq_data));
-UARTRX rxMCM(.clk(clk80), .reset(reset), .RX(UART6_RX), .oData(MCM_rx_data), .oValid(MCM_rx_valid));
+UARTRX rxMCM(.clk(clk80), .reset(reset), .RX(UART7_RX), .oData(MCM_rx_data), .oValid(MCM_rx_valid));
+MCM_coord (
+	.clk(clk80),
+	.reset(reset),
+	.iRQ(MCM_RQ_Signal),
+	.iVal(MCM_rx_valid),
+	.oAddr(MCM_rx_addr),
+	.oDone(MCM_rx_done)
+);
 
+MCM_pack (
+	.clk(clk80),
+	.reset(reset),
+	.iDone(MCM_rx_done),
+	.iData(MCM_dat),
+	//.oRdAddr,		// [7:0]
+	//.oRdEn,			// rden from RAM
+	
+	.iBusy(LCB_busy),				// busy signal from lcb's
+	.oData(MCM_ODATA),				// [11:0]
+	.oAddr(MCM_OADDR),				// [9:0]
+	.oWren(MCM_WREN),			// wren & busy to distributor
+	
+	.oBusy(MCM_busy)			// packer is busy writing to memory
+);
 
 //---------------------------------------------------------------------------------------------------------
 Distributor modelsim_9(
@@ -214,13 +247,16 @@ Distributor modelsim_9(
 	.busy_2(LC2_busy),
 	.busy_3(LC3_busy),
 	.busy_4(LC4_busy),
+	.busy_5(MCM_busy),
 	//common inouts
 	.commWrdOut(LCB_ODATA), .commWrdAddr(LCB_OADDR), .commWren(LCB_WREN), .commOldWrd(LCB_IDATA), .commOldWrdAddr(LCB_RADR), .commOldRdEn(LCB_RDEN),
 	//LCB 1-4 inouts
 	.wrdOut_1(LCB1_ODATA), .wrdAddr_1(LCB1_OADDR), .wren_1(LCB1_WREN), .oldWrd_1(LCB1_IDATA), .oldWrdAddr_1(LCB1_RADR), .oldRdEn_1(LCB1_RDEN),
 	.wrdOut_2(LCB2_ODATA), .wrdAddr_2(LCB2_OADDR), .wren_2(LCB2_WREN), .oldWrd_2(LCB2_IDATA), .oldWrdAddr_2(LCB2_RADR), .oldRdEn_2(LCB2_RDEN),
 	.wrdOut_3(LCB3_ODATA), .wrdAddr_3(LCB3_OADDR), .wren_3(LCB3_WREN), .oldWrd_3(LCB3_IDATA), .oldWrdAddr_3(LCB3_RADR), .oldRdEn_3(LCB3_RDEN),
-	.wrdOut_4(LCB4_ODATA), .wrdAddr_4(LCB4_OADDR), .wren_4(LCB4_WREN), .oldWrd_4(LCB4_IDATA), .oldWrdAddr_4(LCB4_RADR), .oldRdEn_4(LCB4_RDEN)
+	.wrdOut_4(LCB4_ODATA), .wrdAddr_4(LCB4_OADDR), .wren_4(LCB4_WREN), .oldWrd_4(LCB4_IDATA), .oldWrdAddr_4(LCB4_RADR), .oldRdEn_4(LCB4_RDEN),
+	//MCM inouts
+	.wrdOut_m(MCM_ODATA), .wrdAddr_m(MCM_OADDR), .wren_m(MCM_WREN)
 );
 
 

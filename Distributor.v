@@ -7,6 +7,7 @@ module Distributor(
 	input busy_2,
 	input busy_3,
 	input busy_4,
+	input busy_5,
 	//common inouts
 	output reg [11:0]commWrdOut,
 	output reg [9:0]commWrdAddr,
@@ -41,14 +42,20 @@ module Distributor(
 	input wren_4,
 	output reg[11:0]oldWrd_4,
 	input [9:0]oldWrdAddr_4,
-	input oldRdEn_4
+	input oldRdEn_4,
+	//MCM
+	input [11:0]wrdOut_m,
+	input [9:0]wrdAddr_m,
+	input wren_m
+
 );
 
-wire [3:0]trigger;
+wire [4:0]trigger;
 assign trigger[0] = busy_1;
 assign trigger[1] = busy_2;
 assign trigger[2] = busy_3;
 assign trigger[3] = busy_4;
+assign trigger[4] = busy_5;
 
 always@(posedge clk or negedge reset)
 begin
@@ -64,7 +71,7 @@ begin
 		oldWrd_4 <= 0;
 	end else begin
 		case(trigger)
-			3'd1: begin	
+			5'd1: begin	
 				commWrdOut <= wrdOut_1;
 				commWrdAddr <= wrdAddr_1;
 				commWren <= wren_1;
@@ -72,7 +79,7 @@ begin
 				commOldWrdAddr <= oldWrdAddr_1;
 				commOldRdEn <= oldRdEn_1;
 			end
-			3'd2: begin
+			5'd2: begin
 				commWrdOut <= wrdOut_2;
 				commWrdAddr <= wrdAddr_2;
 				commWren <= wren_2;
@@ -80,7 +87,7 @@ begin
 				commOldWrdAddr <= oldWrdAddr_2;
 				commOldRdEn <= oldRdEn_2;
 			end
-			3'd4: begin
+			5'd4: begin
 				commWrdOut <= wrdOut_3;
 				commWrdAddr <= wrdAddr_3;
 				commWren <= wren_3;
@@ -88,13 +95,18 @@ begin
 				commOldWrdAddr <= oldWrdAddr_3;
 				commOldRdEn <= oldRdEn_3;
 			end
-			3'd8: begin
+			5'd8: begin
 				commWrdOut <= wrdOut_4;
 				commWrdAddr <= wrdAddr_4;
 				commWren <= wren_4;
 				oldWrd_4 <= commOldWrd;
 				commOldWrdAddr <= oldWrdAddr_4;
 				commOldRdEn <= oldRdEn_4;
+			end
+			5'd16: begin
+				commWrdOut <= wrdOut_m;
+				commWrdAddr <= wrdAddr_m;
+				commWren <= wren_m;
 			end
 			default: begin
 				commWrdOut <= 0;
@@ -105,6 +117,7 @@ begin
 				oldWrd_1 <= 0;
 				oldWrd_2 <= 0;
 				oldWrd_3 <= 0;
+				oldWrd_4 <= 0;
 			end
 		endcase
 	end

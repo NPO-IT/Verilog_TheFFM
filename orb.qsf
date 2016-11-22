@@ -104,7 +104,6 @@ set_global_assignment -name HEX_FILE memGrp.hex
 set_global_assignment -name VERILOG_FILE divReg.v
 set_global_assignment -name VERILOG_FILE globalReset.v
 set_global_assignment -name VERILOG_FILE M8.v
-set_global_assignment -name VERILOG_FILE receiverLCB.v
 set_global_assignment -name VERILOG_FILE TheFFM.v
 set_global_assignment -name VERILOG_FILE UARTRX.v
 set_global_assignment -name VERILOG_FILE UARTTXBIG.v
@@ -128,3 +127,8 @@ set_location_assignment PIN_21 -to UART6_RX
 set_location_assignment PIN_17 -to UART6_TX
 set_location_assignment PIN_19 -to UART6_dRX
 set_location_assignment PIN_18 -to UART6_dTX
+set_global_assignment -name QIP_FILE MCM_rx_RAM.qip
+set_location_assignment PIN_14 -to UART7_RX
+set_location_assignment PIN_9 -to UART7_TX
+set_location_assignment PIN_13 -to UART7_dRX
+set_location_assignment PIN_11 -to UART7_dTX
