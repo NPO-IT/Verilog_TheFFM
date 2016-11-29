@@ -205,6 +205,8 @@ wire	[7:0]	MCM_dat;
 wire	[11:0]	MCM_ODATA;
 wire	[9:0]	MCM_OADDR;
 wire			MCM_WREN;
+wire	[7:0]	MCM_buf_addr;
+wire			MCM_buf_rden;
 
 assign LCB_busy = LC1_over | LC2_over | LC3_over | LC4_over;
 
@@ -212,7 +214,7 @@ UARTTXBIG rqMCM(.reset(reset), .clk(clk5), .RQ(MCM_RQ_Signal), .cycle(0), .data(
 defparam rqMCM.BYTES = 5'd8;
 ROMmcm mcm(.address(MCM_rq_addr), .inclock(clk80), .outclock(clk80), .q(MCM_rq_data));
 UARTRX rxMCM(.clk(clk80), .reset(reset), .RX(UART7_RX), .oData(MCM_rx_data), .oValid(MCM_rx_valid));
-MCM_coord (
+MCM_coord mcmc(
 	.clk(clk80),
 	.reset(reset),
 	.iRQ(MCM_RQ_Signal),
@@ -221,13 +223,23 @@ MCM_coord (
 	.oDone(MCM_rx_done)
 );
 
-MCM_pack (
+MCM_rx_RAM (
+	.clock(clk80),
+	.data(MCM_rx_data),
+	.rdaddress(MCM_buf_addr),
+	.rden(MCM_buf_rden),
+	.wraddress(MCM_rx_addr),
+	.wren(MCM_rx_valid),
+	.q(MCM_dat)
+);
+
+MCM_pack mcmp(
 	.clk(clk80),
 	.reset(reset),
 	.iDone(MCM_rx_done),
 	.iData(MCM_dat),
-	//.oRdAddr,		// [7:0]
-	//.oRdEn,			// rden from RAM
+	.oRdAddr(MCM_buf_addr),
+	.oRdEn(MCM_buf_rden),
 	
 	.iBusy(LCB_busy),				// busy signal from lcb's
 	.oData(MCM_ODATA),				// [11:0]
@@ -243,10 +255,7 @@ Distributor modelsim_9(
 	.clk(clk80),
 	.reset(reset),
 	//busy signals
-	.busy_1(LC1_busy),
-	.busy_2(LC2_busy),
-	.busy_3(LC3_busy),
-	.busy_4(LC4_busy),
+	.busy_1(LC1_busy), .busy_2(LC2_busy), .busy_3(LC3_busy), .busy_4(LC4_busy),
 	.busy_5(MCM_busy),
 	//common inouts
 	.commWrdOut(LCB_ODATA), .commWrdAddr(LCB_OADDR), .commWren(LCB_WREN), .commOldWrd(LCB_IDATA), .commOldWrdAddr(LCB_RADR), .commOldRdEn(LCB_RDEN),
@@ -260,10 +269,10 @@ Distributor modelsim_9(
 );
 
 
-assign testGreen = MEM2_WE;			//ch4
-assign testBlue = LCB_WREN;			//ch2
-assign testYellow = LC3_over;	//ch1
-assign testRed = MEM2_RE;			//ch3
+assign testGreen = LC3_over;			//ch2
+assign testBlue = MCM_busy;			//ch3
+assign testYellow = MCM_buf_rden;		//ch1
+assign testRed = MCM_RQ_Signal;			//ch4
 
 
 endmodule
