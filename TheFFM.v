@@ -70,6 +70,8 @@ wire 			MCM_RQ_Signal;
 // common
 globalReset aClear(.clk(clk80), .rst(reset));	// global uber aclr imitation
 defparam aClear.delayInSec = 1;
+defparam aClear.clockFreq = 8; // for simulation purposes
+
 divReg clk80Divider(.reset(reset), .iClkIN(clk80), .Outdiv16(clk5)); 	// clk generator 80MHz (5MHz for UART transmissions)
 divReg clk100Divider(.reset(reset), .iClkIN(clk100), .Outdiv8(clk12)); 	// clk generator 100'663'296Hz (~12,5MHz for M8-former. "Orbita Frame")
 
@@ -123,7 +125,7 @@ M8 frameFormer( .reset(reset), .clk(clk12),	// 12'582'912
 	.oLCB3_rq(LCB3_RQ_Signal),				// request signal for UARTTX
 	.oLCB4_rq(LCB4_RQ_Signal),				// request signal for UARTTX
 	.oLCB_num(LCB_RQ_Number),				// [4:0]NumRQ
-	.oMCM_rq(MCM_RQ_Signal),
+	.oMCM_rq(MCM_RQ_Signal)
 );
 
 //---------------------------------------------------------------------------------------------------------
@@ -205,6 +207,8 @@ wire	[7:0]	MCM_dat;
 wire	[11:0]	MCM_ODATA;
 wire	[9:0]	MCM_OADDR;
 wire			MCM_WREN;
+wire	[7:0]	MCM_buf_addr;
+wire			MCM_buf_rden;
 
 assign LCB_busy = LC1_over | LC2_over | LC3_over | LC4_over;
 
@@ -212,7 +216,7 @@ UARTTXBIG rqMCM(.reset(reset), .clk(clk5), .RQ(MCM_RQ_Signal), .cycle(0), .data(
 defparam rqMCM.BYTES = 5'd8;
 ROMmcm mcm(.address(MCM_rq_addr), .inclock(clk80), .outclock(clk80), .q(MCM_rq_data));
 UARTRX rxMCM(.clk(clk80), .reset(reset), .RX(UART7_RX), .oData(MCM_rx_data), .oValid(MCM_rx_valid));
-MCM_coord (
+MCM_coord mcmc(
 	.clk(clk80),
 	.reset(reset),
 	.iRQ(MCM_RQ_Signal),
@@ -221,13 +225,23 @@ MCM_coord (
 	.oDone(MCM_rx_done)
 );
 
-MCM_pack (
+MCM_rx_RAM mcram(
+	.clock(clk80),
+	.data(MCM_rx_data),
+	.rdaddress(MCM_buf_addr),
+	.rden(MCM_buf_rden),
+	.wraddress(MCM_rx_addr),
+	.wren(MCM_rx_valid),
+	.q(MCM_dat)
+);
+
+MCM_pack mcp(
 	.clk(clk80),
 	.reset(reset),
 	.iDone(MCM_rx_done),
 	.iData(MCM_dat),
-	//.oRdAddr,		// [7:0]
-	//.oRdEn,			// rden from RAM
+	.oRdAddr(MCM_buf_addr),		// [7:0]
+	.oRdEn(MCM_buf_rden),			// rden from RAM
 	
 	.iBusy(LCB_busy),				// busy signal from lcb's
 	.oData(MCM_ODATA),				// [11:0]
@@ -243,10 +257,7 @@ Distributor modelsim_9(
 	.clk(clk80),
 	.reset(reset),
 	//busy signals
-	.busy_1(LC1_busy),
-	.busy_2(LC2_busy),
-	.busy_3(LC3_busy),
-	.busy_4(LC4_busy),
+	.busy_1(LC1_busy), .busy_2(LC2_busy), .busy_3(LC3_busy), .busy_4(LC4_busy),
 	.busy_5(MCM_busy),
 	//common inouts
 	.commWrdOut(LCB_ODATA), .commWrdAddr(LCB_OADDR), .commWren(LCB_WREN), .commOldWrd(LCB_IDATA), .commOldWrdAddr(LCB_RADR), .commOldRdEn(LCB_RDEN),
@@ -256,14 +267,14 @@ Distributor modelsim_9(
 	.wrdOut_3(LCB3_ODATA), .wrdAddr_3(LCB3_OADDR), .wren_3(LCB3_WREN), .oldWrd_3(LCB3_IDATA), .oldWrdAddr_3(LCB3_RADR), .oldRdEn_3(LCB3_RDEN),
 	.wrdOut_4(LCB4_ODATA), .wrdAddr_4(LCB4_OADDR), .wren_4(LCB4_WREN), .oldWrd_4(LCB4_IDATA), .oldWrdAddr_4(LCB4_RADR), .oldRdEn_4(LCB4_RDEN),
 	//MCM inouts
-	.wrdOut_m(MCM_ODATA), .wrdAddr_m(MCM_OADDR), .wren_m(MCM_WREN)
+	//.wrdOut_m(MCM_ODATA), .wrdAddr_m(MCM_OADDR), .wren_m(MCM_WREN)
 );
 
-
+// do not change this part, it somehow influences the rest of the code!!!
 assign testGreen = MEM2_WE;			//ch4
 assign testBlue = LCB_WREN;			//ch2
 assign testYellow = LC3_over;	//ch1
-assign testRed = MEM2_RE;			//ch3
+assign testRed = MCM_RQ_Signal;			//ch4
 
 
 endmodule

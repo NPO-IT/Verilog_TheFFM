@@ -19,7 +19,7 @@ module TheFFM_tb();
 	
 	//local variables
 	reg clk5, clkOrbx4, clkOrb;
-	reg [7:0]number[0:14];
+	reg [7:0]number[0:15];
 	reg [2:0]i = 0;
 	reg [3:0]j = 0;
 	reg [2:0]i2 = 0;
