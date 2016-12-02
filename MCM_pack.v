@@ -46,6 +46,7 @@ begin
 		stepAct <= 5'b0;
 		cntStream <= 5'b0;
 		numStream <= 2'b0;
+		state <= 3'b0;
 	end else begin
 		case (state)
 			IDLE: begin						// wait for MCM data to fill in

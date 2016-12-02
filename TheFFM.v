@@ -68,8 +68,11 @@ wire 			MCM_RQ_Signal;
 
 //---------------------------------------------------------------------------------------------------------
 // common
+
 globalReset aClear(.clk(clk80), .rst(reset));	// global uber aclr imitation
 defparam aClear.delayInSec = 1;
+defparam aClear.clockFreq = 8;	// for simulations
+
 divReg clk80Divider(.reset(reset), .iClkIN(clk80), .Outdiv16(clk5)); 	// clk generator 80MHz (5MHz for UART transmissions)
 divReg clk100Divider(.reset(reset), .iClkIN(clk100), .Outdiv8(clk12)); 	// clk generator 100'663'296Hz (~12,5MHz for M8-former. "Orbita Frame")
 
@@ -123,7 +126,7 @@ M8 frameFormer( .reset(reset), .clk(clk12),	// 12'582'912
 	.oLCB3_rq(LCB3_RQ_Signal),				// request signal for UARTTX
 	.oLCB4_rq(LCB4_RQ_Signal),				// request signal for UARTTX
 	.oLCB_num(LCB_RQ_Number),				// [4:0]NumRQ
-	.oMCM_rq(MCM_RQ_Signal),
+	.oMCM_rq(MCM_RQ_Signal)
 );
 
 //---------------------------------------------------------------------------------------------------------
@@ -223,7 +226,7 @@ MCM_coord mcmc(
 	.oDone(MCM_rx_done)
 );
 
-MCM_rx_RAM (
+MCM_rx_RAM mcr1(
 	.clock(clk80),
 	.data(MCM_rx_data),
 	.rdaddress(MCM_buf_addr),
