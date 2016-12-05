@@ -83,6 +83,12 @@ module MCM_rx_RAM (
 		altdpram_component.indata_aclr = "OFF",
 		altdpram_component.indata_reg = "INCLOCK",
 		altdpram_component.intended_device_family = "FLEX10KE",
+`ifdef NO_PLI
+		altdpram_component.lpm_file = "mcmramhex.rif"
+`else
+		altdpram_component.lpm_file = "mcmramhex.hex"
+`endif
+,
 		altdpram_component.lpm_type = "altdpram",
 		altdpram_component.outdata_aclr = "OFF",
 		altdpram_component.outdata_reg = "OUTCLOCK",
@@ -110,7 +116,7 @@ endmodule
 // Retrieval info: PRIVATE: BYTE_ENABLE_A NUMERIC "0"
 // Retrieval info: PRIVATE: BYTE_ENABLE_B NUMERIC "0"
 // Retrieval info: PRIVATE: BYTE_SIZE NUMERIC "1"
-// Retrieval info: PRIVATE: BlankMemory NUMERIC "1"
+// Retrieval info: PRIVATE: BlankMemory NUMERIC "0"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_A NUMERIC "0"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_B NUMERIC "0"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_OUTPUT_A NUMERIC "0"
@@ -136,7 +142,7 @@ endmodule
 // Retrieval info: PRIVATE: MAXIMUM_DEPTH NUMERIC "0"
 // Retrieval info: PRIVATE: MEMSIZE NUMERIC "2048"
 // Retrieval info: PRIVATE: MEM_IN_BITS NUMERIC "0"
-// Retrieval info: PRIVATE: MIFfilename STRING ""
+// Retrieval info: PRIVATE: MIFfilename STRING "mcmramhex.hex"
 // Retrieval info: PRIVATE: OPERATION_MODE NUMERIC "2"
 // Retrieval info: PRIVATE: OUTDATA_ACLR_B NUMERIC "0"
 // Retrieval info: PRIVATE: OUTDATA_REG_B NUMERIC "1"
@@ -166,6 +172,7 @@ endmodule
 // Retrieval info: CONSTANT: INDATA_ACLR STRING "OFF"
 // Retrieval info: CONSTANT: INDATA_REG STRING "INCLOCK"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
+// Retrieval info: CONSTANT: LPM_FILE STRING "mcmramhex.hex"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altdpram"
 // Retrieval info: CONSTANT: OUTDATA_ACLR STRING "OFF"
 // Retrieval info: CONSTANT: OUTDATA_REG STRING "OUTCLOCK"
@@ -198,7 +205,7 @@ endmodule
 // Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM.v TRUE
 // Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM.inc FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM.cmp TRUE
-// Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM.bsf FALSE
+// Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM.bsf TRUE FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM_inst.v FALSE
 // Retrieval info: GEN_FILE: TYPE_NORMAL MCM_rx_RAM_bb.v TRUE
 // Retrieval info: LIB_FILE: altera_mf

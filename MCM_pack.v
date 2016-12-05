@@ -41,16 +41,30 @@ begin
 		oData <= 12'b0;
 		oAddr <= 10'b0;
 		oWren <= 1'b0;
+		oRdAddr <= 8'b0;
+		oRdEn <= 1'b0;
 		oBusy <= 1'b0;
 		word <= 12'b0;
+		state <= 3'b0;
 		stepAct <= 5'b0;
 		cntStream <= 5'b0;
 		numStream <= 2'b0;
 	end else begin
 		case (state)
 			IDLE: begin						// wait for MCM data to fill in
-				if(iDone)
+				if(iDone) begin
 					state <= WAITMEM;
+					oData <= 12'b0;
+					oAddr <= 10'b0;
+					oWren <= 1'b0;
+					oRdAddr <= 8'b0;
+					oRdEn <= 1'b0;
+					oBusy <= 1'b0;
+					word <= 12'b0;
+					stepAct <= 5'b0;
+					cntStream <= 5'b0;
+					numStream <= 2'b0;
+				end
 			end
 			WAITMEM: begin					// wait for group mems to be available
 				if(rearBusy) begin			// if lcbs are done 
@@ -62,7 +76,7 @@ begin
 				stepAct <= stepAct + 1'b1;			// make a sequence of actions
 				case(stepAct)
 					0: oRdEn <= 1'b1;				// read from memory + wait 3 clocks for memory to respond
-					3: word[11:4] <= iData[7:0];	// write a word
+					3: word[10:3] <= iData[7:0];	// write a word
 					4: begin
 						oRdEn <= 1'b0;				// stop reading
 						oRdAddr <= oRdAddr + 1'b1;	// prepare to read next word from buffer
@@ -70,15 +84,15 @@ begin
 						oWren <= 1'b1;				// enable writing to group memory
 					end
 					5: oRdEn <= 1'b1;				// read another word from buffer + wait 3 clocks for memory to respond
-					8: word[11:4] <= iData[7:0];	// write LSB to word
+					8: oWren <= 1'b0;				// stop writing previous word
 					9: begin
-						oWren <= 1'b0;				// stop writing previous word
+						word[10:3] <= iData[7:0];	// write LSB to word
 						oAddr <= oAddr + 10'd32;	// prepare next group writing address
 						oRdEn <= 1'b0;				// stop reading
 						oRdAddr <= oRdAddr + 1'b1;	// prepare to read next word from buffer
 					end
 					10: oRdEn <= 1'b1;				// read another word from buffer + wait 3 clocks for memory to respond
-					13: word[3:2] <= iData[1:0];	// write MSB to word
+					13: word[2:1] <= iData[1:0];	// write MSB to word
 					14: begin
 						oRdEn <= 1'b0;				// stop reading
 						oRdAddr <= oRdAddr + 1'b1;	// prepare to read next word from buffer
@@ -102,9 +116,6 @@ begin
 					cntStream <= 5'b0;					// drop the inner stream counter
 					numStream <= numStream + 1'b1;		// proceed to next stream
 					if(numStream == 2'd2) begin			// if it's already third stream
-						numStream <= 2'b0;				// drop the stream number
-						oAddr <= 10'b0;					// drop address
-						oBusy <= 1'b0;					// drop business signal
 						state <= DONE;					// go and wait for outer driver signals
 					end else begin
 						state <= WAITMEM;				// otherwise go and wait for next time memory will be free to write
@@ -116,6 +127,7 @@ begin
 				if(~iDone) begin				// and when outer driver started requesting next data
 					state <= IDLE;				// drop everything and go wait next portion of data
 					oData <= 12'b0;
+					oRdAddr <= 8'd0;
 					oAddr <= 10'b0;
 					oWren <= 1'b0;
 					oBusy <= 1'b0;

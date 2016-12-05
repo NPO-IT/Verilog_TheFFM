@@ -227,11 +227,11 @@ MCM_coord mcmc(
 
 MCM_rx_RAM mcram(
 	.clock(clk80),
-	.data(MCM_rx_data),
+	//.data(MCM_rx_data),
 	.rdaddress(MCM_buf_addr),
 	.rden(MCM_buf_rden),
-	.wraddress(MCM_rx_addr),
-	.wren(MCM_rx_valid),
+	//.wraddress(MCM_rx_addr),
+	//.wren(MCM_rx_valid),
 	.q(MCM_dat)
 );
 
@@ -243,7 +243,7 @@ MCM_pack mcp(
 	.oRdAddr(MCM_buf_addr),		// [7:0]
 	.oRdEn(MCM_buf_rden),			// rden from RAM
 	
-	.iBusy(LCB_busy),				// busy signal from lcb's
+	.iBusy(LC3_over),				// busy signal from lcb's
 	.oData(MCM_ODATA),				// [11:0]
 	.oAddr(MCM_OADDR),				// [9:0]
 	.oWren(MCM_WREN),			// wren & busy to distributor
@@ -267,12 +267,12 @@ Distributor modelsim_9(
 	.wrdOut_3(LCB3_ODATA), .wrdAddr_3(LCB3_OADDR), .wren_3(LCB3_WREN), .oldWrd_3(LCB3_IDATA), .oldWrdAddr_3(LCB3_RADR), .oldRdEn_3(LCB3_RDEN),
 	.wrdOut_4(LCB4_ODATA), .wrdAddr_4(LCB4_OADDR), .wren_4(LCB4_WREN), .oldWrd_4(LCB4_IDATA), .oldWrdAddr_4(LCB4_RADR), .oldRdEn_4(LCB4_RDEN),
 	//MCM inouts
-	//.wrdOut_m(MCM_ODATA), .wrdAddr_m(MCM_OADDR), .wren_m(MCM_WREN)
+	.wrdOut_m(MCM_ODATA), .wrdAddr_m(MCM_OADDR), .wren_m(MCM_WREN)
 );
 
 // do not change this part, it somehow influences the rest of the code!!!
-assign testGreen = MEM2_WE;			//ch4
-assign testBlue = LCB_WREN;			//ch2
+assign testGreen = MCM_WREN;			//ch4
+//assign testBlue = LCB_WREN;			//ch2
 assign testYellow = LC3_over;	//ch1
 assign testRed = MCM_RQ_Signal;			//ch4
 

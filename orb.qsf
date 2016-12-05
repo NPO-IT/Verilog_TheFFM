@@ -132,3 +132,4 @@ set_location_assignment PIN_14 -to UART7_RX
 set_location_assignment PIN_9 -to UART7_TX
 set_location_assignment PIN_13 -to UART7_dRX
 set_location_assignment PIN_11 -to UART7_dTX
+set_global_assignment -name HEX_FILE mcmramhex.hex
