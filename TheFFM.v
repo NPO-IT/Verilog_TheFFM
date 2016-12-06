@@ -227,11 +227,11 @@ MCM_coord mcmc(
 
 MCM_rx_RAM mcram(
 	.clock(clk80),
-	//.data(MCM_rx_data),
+	.data(MCM_rx_data),
 	.rdaddress(MCM_buf_addr),
 	.rden(MCM_buf_rden),
-	//.wraddress(MCM_rx_addr),
-	//.wren(MCM_rx_valid),
+	.wraddress(MCM_rx_addr),
+	.wren(MCM_rx_valid),
 	.q(MCM_dat)
 );
 

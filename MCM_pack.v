@@ -76,30 +76,30 @@ begin
 				stepAct <= stepAct + 1'b1;			// make a sequence of actions
 				case(stepAct)
 					0: oRdEn <= 1'b1;				// read from memory + wait 3 clocks for memory to respond
-					3: word[10:3] <= iData[7:0];	// write a word
-					4: begin
+					4: word[10:3] <= iData[7:0];	// write a word
+					5: begin
 						oRdEn <= 1'b0;				// stop reading
 						oRdAddr <= oRdAddr + 1'b1;	// prepare to read next word from buffer
 						oData <= word;				// set word to output
 						oWren <= 1'b1;				// enable writing to group memory
 					end
-					5: oRdEn <= 1'b1;				// read another word from buffer + wait 3 clocks for memory to respond
-					8: oWren <= 1'b0;				// stop writing previous word
-					9: begin
+					6: oRdEn <= 1'b1;				// read another word from buffer + wait 3 clocks for memory to respond
+					10: oWren <= 1'b0;				// stop writing previous word
+					11: begin
 						word[10:3] <= iData[7:0];	// write LSB to word
 						oAddr <= oAddr + 10'd32;	// prepare next group writing address
 						oRdEn <= 1'b0;				// stop reading
 						oRdAddr <= oRdAddr + 1'b1;	// prepare to read next word from buffer
 					end
-					10: oRdEn <= 1'b1;				// read another word from buffer + wait 3 clocks for memory to respond
-					13: word[2:1] <= iData[1:0];	// write MSB to word
-					14: begin
+					12: oRdEn <= 1'b1;				// read another word from buffer + wait 3 clocks for memory to respond
+					16: word[2:1] <= iData[1:0];	// write MSB to word
+					17: begin
 						oRdEn <= 1'b0;				// stop reading
 						oRdAddr <= oRdAddr + 1'b1;	// prepare to read next word from buffer
 						oData <= word;				// set word to output
 						oWren <= 1'b1;				// enable writing to group memory and wait 3 clocks
 					end
-					17: begin
+					21: begin
 						oWren <= 1'b0;					// stop writing previous word
 						oAddr <= oAddr + 10'd32;		// prepare next group writing address
 						cntStream <= cntStream + 1'b1;	// count iterations inside one stream

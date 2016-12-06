@@ -83,12 +83,6 @@ module MCM_rx_RAM (
 		altdpram_component.indata_aclr = "OFF",
 		altdpram_component.indata_reg = "INCLOCK",
 		altdpram_component.intended_device_family = "FLEX10KE",
-`ifdef NO_PLI
-		altdpram_component.lpm_file = "mcmramhex.rif"
-`else
-		altdpram_component.lpm_file = "mcmramhex.hex"
-`endif
-,
 		altdpram_component.lpm_type = "altdpram",
 		altdpram_component.outdata_aclr = "OFF",
 		altdpram_component.outdata_reg = "OUTCLOCK",
@@ -116,7 +110,7 @@ endmodule
 // Retrieval info: PRIVATE: BYTE_ENABLE_A NUMERIC "0"
 // Retrieval info: PRIVATE: BYTE_ENABLE_B NUMERIC "0"
 // Retrieval info: PRIVATE: BYTE_SIZE NUMERIC "1"
-// Retrieval info: PRIVATE: BlankMemory NUMERIC "0"
+// Retrieval info: PRIVATE: BlankMemory NUMERIC "1"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_A NUMERIC "0"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_INPUT_B NUMERIC "0"
 // Retrieval info: PRIVATE: CLOCK_ENABLE_OUTPUT_A NUMERIC "0"
@@ -172,7 +166,6 @@ endmodule
 // Retrieval info: CONSTANT: INDATA_ACLR STRING "OFF"
 // Retrieval info: CONSTANT: INDATA_REG STRING "INCLOCK"
 // Retrieval info: CONSTANT: INTENDED_DEVICE_FAMILY STRING "FLEX10KE"
-// Retrieval info: CONSTANT: LPM_FILE STRING "mcmramhex.hex"
 // Retrieval info: CONSTANT: LPM_TYPE STRING "altdpram"
 // Retrieval info: CONSTANT: OUTDATA_ACLR STRING "OFF"
 // Retrieval info: CONSTANT: OUTDATA_REG STRING "OUTCLOCK"
