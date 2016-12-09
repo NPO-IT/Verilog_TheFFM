@@ -16,3 +16,6 @@
 **/db/*
 **/simulation/*
 **/greybox_tmp/*
+*.kpt
+incremental_db/compiled_partitions/orb.root_partition.map.kpt
+*.ddb
